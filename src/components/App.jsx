@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
-import Login from './auth/Login'
+import Login from './auth/Login';
 import Registration from './auth/Registration';
-import SubmitForgotPassword from './auth/SubmitForgotPassword'
-import Home from '../components/Home'
-import { API_ROOT } from '../apiRoot'
+import RequestForgotPassword from './auth/RequestForgotPassword';
+import ResetPassword from './auth/ResetPassword';
+import Home from '../components/Home';
+import { API_ROOT } from '../apiRoot';
 
 
 const App = () => {
 
   useEffect(() => {
     isLoggedIn()
-  },[]);
+  });
 
   const [ loggedIn, setLoggedIn ] = useState('NOT_LOGGED_IN');
   const [ user, setUser ] = useState({});
@@ -35,8 +36,6 @@ const App = () => {
     setUser(data.user)
   }
 
-  console.log(loggedIn, user)
-
   return(
     <div>
       <Routes>
@@ -57,7 +56,12 @@ const App = () => {
         />
         <Route path={"/forgot_password"}
                element={
-                <SubmitForgotPassword />
+                <RequestForgotPassword />
+              } 
+        />
+        <Route path={"/password_reset/:token"}
+               element={
+                <ResetPassword />
               } 
         />
       </Routes>

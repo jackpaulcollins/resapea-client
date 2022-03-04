@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { API_ROOT } from '../../apiRoot'
 
-const SubmitForgotPassword = () => {
+const RequestForgotPassword = () => {
   const [ email, setEmail ] = useState('');
 
   async function handleSubmit(e) {
@@ -69,4 +69,4 @@ const SubmitForgotPassword = () => {
     );
   }
 
-export default SubmitForgotPassword;
+export default RequestForgotPassword;
