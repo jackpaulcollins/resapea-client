@@ -7,7 +7,7 @@ const SubmitForgotPassword = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-   const body = { user: { email: email }}
+   const body = { email: email }
 
     fetch(`${API_ROOT}/api/forgot_password`, {
       headers: {'Content-Type': 'application/json'},
