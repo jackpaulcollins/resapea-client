@@ -164,9 +164,8 @@ const Registration = (props) => {
                   id="exampleCheck2" />
                 <label className="form-check-label inline-block text-gray-800" htmlFor="exampleCheck2">Remember me</label>
               </div>
-              <a href="#!"
-                className="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out">Forgot
-                password?</a>
+              <a href="/login"
+                className="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out">Have an account? Login</a>
           </div>
           <button type="submit" className="
             px-6

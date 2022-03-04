@@ -110,9 +110,9 @@ const Login = (props) => {
                 id="exampleCheck2" />
               <label className="form-check-label inline-block text-gray-800" htmlFor="exampleCheck2">Remember me</label>
             </div>
-            <a href="#!"
+            <a href="/forgot_password"
               className="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out">Forgot
-              password??</a>
+              password?</a>
         </div>
         <button type="submit" className="
           px-6
