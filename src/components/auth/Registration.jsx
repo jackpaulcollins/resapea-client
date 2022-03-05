@@ -9,10 +9,14 @@ const Registration = (props) => {
   const [ password, setPassword ] = useState('');
   const [ passwordConfirmation, setPasswordConfirmation  ] = useState('');
   const [ authErrorState, setAuthErrorState ] = useState({ isError: false})
+
   async function handleSubmit(e){
     e.preventDefault();
-
-    const body = {       
+    if (
+      ensurePasswordsMeetMinimum(password, passwordConfirmation)
+      && ensurePasswordsMatch(password, passwordConfirmation)
+      ) {
+        const body = {       
           user: {
           email: email,
           username: username,
@@ -33,20 +37,45 @@ const Registration = (props) => {
         props.handleLogin(data)
         navigate("/");
       } else
-      {
-        setAuthErrorState({
-          isError: true,
-          data: data.errors
-        });
-      }
-    });
+        {
+          setAuthErrorState({
+            isError: true,
+            message: data.errors
+          });
+        }
+      });
+    }  
+  }
+
+  const ensurePasswordsMatch = (p1, p2) => {
+    if ( p1 !== p2) {
+      setAuthErrorState({
+        isError: true,
+        message: `Passwords don't match`
+      })
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const ensurePasswordsMeetMinimum = (p1, p2) => {
+    if (p1.length < 6 || p2.length < 6) {
+      setAuthErrorState({
+        isError: true,
+        message: 'Password must be at least six characters'
+      })
+      return false
+    } else {
+      return true
+    }
   }
 
   const authError = () =>{
     if (authErrorState.isError){
       return (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
-          <span className="block sm:inline">{authErrorState.data}</span>
+          <span className="block sm:inline">{authErrorState.message}</span>
           <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
           <button
             className="absolute bg-transparent text-2xl leading-none right-0 top-0 mt-2 mr-6 outline-none focus:outline-none"

@@ -12,7 +12,7 @@ const ResetPassword = () => {
   const [ password, setPassword ] = useState('');
   const [ passwordConfirmation, setPasswordConfirmation  ] = useState('');
   const [ token, setToken ] = useState('');
-  const [ message, setMessage ] = useState('');
+  const [ message, setMessage ] = useState({});
   const params = useParams();
 
   async function handleSubmit(e) {
@@ -70,16 +70,16 @@ const ResetPassword = () => {
   }
 
   const apiErrorMessage = () =>{
-    if (message.status == 500){
+    if (message.status == 500 || message.status === 422){
       return (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
           <span className="block sm:inline"><p>{message.message}</p></span>
           <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+          </span>
           <button
             className="absolute bg-transparent text-2xl leading-none right-0 top-0 mt-2 mr-6 outline-none focus:outline-none"
             onClick={() => setMessage({})}
           ><span>x</span></button>
-          </span>
         </div>
       )
     }
