@@ -39,30 +39,30 @@ const App = () => {
   return(
     <div>
       <Routes>
-      <Route path={"/"} element={<Home />} />
-        <Route path={"/login"} 
-               element={
-                <Login
-                loggedIn={loggedIn} 
-                handleLogin={handleLogin}  
-                />} 
-        />
-        <Route path={"/register"}
-               element={
-                <Registration 
-                loggedIn={loggedIn} 
-                handleLogin={handleLogin} 
-                />} 
-        />
-        <Route path={"/forgot_password"}
-               element={
-                <RequestForgotPassword />
-              } 
-        />
-        <Route path={"/password_reset/:token"}
-               element={
-                <ResetPassword />
-              } 
+        <Route path={"/"} element={<Home />} />
+          <Route path={"/login"} 
+                element={
+                  <Login
+                  loggedIn={loggedIn} 
+                  handleLogin={handleLogin}  
+                  />} 
+          />
+          <Route path={"/register"}
+                element={
+                  <Registration 
+                  loggedIn={loggedIn} 
+                  handleLogin={handleLogin} 
+                  />} 
+          />
+          <Route path={"/forgot_password"}
+                element={
+                  <RequestForgotPassword />
+                } 
+          />
+          <Route path={"/password_reset/:token"}
+                element={
+                  <ResetPassword />
+                } 
         />
       </Routes>
     </div>
