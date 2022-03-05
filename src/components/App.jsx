@@ -5,6 +5,7 @@ import Registration from './auth/Registration';
 import RequestForgotPassword from './auth/RequestForgotPassword';
 import ResetPassword from './auth/ResetPassword';
 import Home from '../components/Home';
+import NavigationBar from '../components/NavigationBar';
 import { API_ROOT } from '../apiRoot';
 
 
@@ -38,6 +39,7 @@ const App = () => {
 
   return(
     <div>
+      <NavigationBar />
       <Routes>
         <Route path={"/"} element={<Home />} />
           <Route path={"/login"} 
