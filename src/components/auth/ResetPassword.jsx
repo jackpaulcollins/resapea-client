@@ -10,26 +10,95 @@ const ResetPassword = () => {
   },[]);
 
   const [ password, setPassword ] = useState('');
-  //const [ passwordConfirmation, setPasswordConfirmation  ] = useState('');
+  const [ passwordConfirmation, setPasswordConfirmation  ] = useState('');
   const [ token, setToken ] = useState('');
+  const [ message, setMessage ] = useState('');
   const params = useParams();
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (
+          ensurePasswordsMeetMinimum(password, passwordConfirmation)
+          && ensurePasswordsMatch(password, passwordConfirmation)
+       ) {
+      const body = { 
+                     token: token,
+                     password: password
+                   }
+   
+      fetch(`${API_ROOT}/api/reset_password`, {
+        headers: {'Content-Type': 'application/json'},
+        method: 'post',
+        credentials: 'include',
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data) {
+          console.log(data)
+          setMessage({
+            status: data.status,
+            message: data.message
+          });
+        } 
+      })
+    }
+  }
 
-   const body = { 
-                  token: token,
-                  password: password
-                }
+  const ensurePasswordsMatch = (p1, p2) => {
+    if ( p1 !== p2) {
+      setMessage({
+        status: 'error',
+        message: `Passwords don't match`
+      })
+      return false
+    } else {
+      return true
+    }
+  }
 
-    fetch(`${API_ROOT}/api/reset_password`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'post',
-      credentials: 'include',
-      body: JSON.stringify(body)
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));
+  const ensurePasswordsMeetMinimum = (p1, p2) => {
+    if (p1.length < 6 || p2.length < 6) {
+      setMessage({
+        status: 'error',
+        message: 'Password must be at least six characters'
+      })
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const apiErrorMessage = () =>{
+    if (message.status == 500){
+      return (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
+          <span className="block sm:inline"><p>{message.message}</p></span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+          <button
+            className="absolute bg-transparent text-2xl leading-none right-0 top-0 mt-2 mr-6 outline-none focus:outline-none"
+            onClick={() => setMessage({})}
+          ><span>x</span></button>
+          </span>
+        </div>
+      )
+    }
+  }
+
+  const apiSuccessMessage = () =>{
+    if (message.status == 200){
+      return (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4" role="alert">
+          <span className="block sm:inline"><p>{message.message}</p></span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+          <button
+            className="absolute bg-transparent text-2xl leading-none right-0 top-0 mt-2 mr-6 outline-none focus:outline-none"
+            onClick={() => setMessage({})}
+          ><span>x</span></button>
+          </span>
+        </div>
+      )
+    }
   }
   
   return (
@@ -58,7 +127,7 @@ const ResetPassword = () => {
               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleInputPassword1"
               placeholder="Password"/>
           </div>
-          {/* <div className="form-group mb-6">
+          <div className="form-group mb-6">
             <label htmlFor="passwordConfirmation" className="form-label inline-block mb-2 text-gray-700">Password Confirmation</label>
             <input 
               type="password"
@@ -80,7 +149,7 @@ const ResetPassword = () => {
               m-0
               focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="passwordConfirmation"
               placeholder="Password Confirmation"/>
-          </div> */}
+          </div>
           <div>
           <button type="submit" className="
                 px-6
@@ -99,6 +168,8 @@ const ResetPassword = () => {
                 transition
                 duration-150
                 ease-in-out">Submit</button>
+                {apiErrorMessage()}
+                {apiSuccessMessage()}
           </div>
       </form>
     </div>
