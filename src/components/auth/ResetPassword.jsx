@@ -30,6 +30,7 @@ const ResetPassword = () => {
         headers: {'Content-Type': 'application/json'},
         method: 'post',
         credentials: 'include',
+        withCredentials: true,
         body: JSON.stringify(body)
       })
       .then(response => response.json())
