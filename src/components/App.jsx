@@ -19,7 +19,7 @@ const App = () => {
   const [ user, setUser ] = useState({});
 
   async function isLoggedIn() {
-    fetch(`${API_ROOT}/api/logged_in`, { credentials: 'include'})
+    fetch(`${API_ROOT}/api/logged_in`, { credentials: 'include', withCredentials: true})
     .then(response => response.json())
     .then(data => {
       if (data.logged_in && loggedIn === "NOT_LOGGED_IN") {
@@ -35,7 +35,8 @@ const App = () => {
   async function logout() {
     fetch(`${API_ROOT}/api/logout`, {
       method: 'delete',
-      credentials: 'include'
+      credentials: 'include',
+      withCredentials: true
     })
     .then(response => response.json())
     .then(data => {
