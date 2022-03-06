@@ -9,7 +9,8 @@ const Login = (props) => {
   const [ authErrorState, setAuthErrorState ] = useState({ isError: false})
 
   useEffect(() => {
-    if (!props.isLoggedIn){
+    console.log(props.loggedIn)
+    if (!props.loggedIn){
       navigate("/")
     }
   }, [props.isLoggedIn])
