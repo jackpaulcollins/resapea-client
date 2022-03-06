@@ -9,11 +9,10 @@ const Login = (props) => {
   const [ authErrorState, setAuthErrorState ] = useState({ isError: false})
 
   useEffect(() => {
-    console.log(props.loggedIn)
-    if (!props.loggedIn){
+    if (props.loggedIn === "LOGGED_IN"){
       navigate("/")
     }
-  }, [props.isLoggedIn])
+  }, [props.loggedIn])
 
   async function handleSubmit(e) {
     e.preventDefault();
