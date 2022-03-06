@@ -19,13 +19,27 @@ const App = () => {
   const [ user, setUser ] = useState({});
 
   async function isLoggedIn() {
-    fetch(`${API_ROOT}/api/logged_in`)
+    fetch(`${API_ROOT}/api/logged_in`, { credentials: 'include'})
     .then(response => response.json())
     .then(data => {
       if (data.logged_in && loggedIn === "NOT_LOGGED_IN") {
         setLoggedIn("LOGGED_IN")
         setUser(data.user)
       } else if (!data.logged_in && loggedIn === "LOGGED_IN") {
+        setLoggedIn("NOT_LOGGED_IN")
+        setUser({})
+      }
+    });
+  }
+
+  async function logout() {
+    fetch(`${API_ROOT}/api/logout`, {
+      method: 'delete',
+      credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
         setLoggedIn("NOT_LOGGED_IN")
         setUser({})
       }
@@ -39,7 +53,7 @@ const App = () => {
 
   return(
     <div>
-      <NavigationBar />
+      <NavigationBar user={user} logout={logout} />
       <Routes>
         <Route path={"/"} element={<Home />} />
           <Route path={"/login"} 

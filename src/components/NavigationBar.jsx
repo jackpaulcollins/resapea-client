@@ -1,12 +1,63 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 
-export default function NavigationBar({ fixed }) {
+export default function NavigationBar(props) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+  //if the user object contains an id it means a user is logged in
+  const isLoggedIn = props.user.id ? true : false;
+
+  const handleLogoutClick = () => {
+    props.logout()
+    navigate("/")
+  }
+
+  const loggedInLinks = () => {
+    if (isLoggedIn) {
+      return (
+        <div>
+          <button
+            onClick={() => navigate('/#')}
+            className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+            >
+            Account
+          </button>
+
+           <button
+            onClick={() => handleLogoutClick()}
+            className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Logout
+         </button>
+      </div>
+      )
+    } else {
+      return (
+        <div>
+          <a
+          href="/login"
+          className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Login
+        </a>
+
+        <a
+          href="/register"
+          className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Sign up
+        </a>
+    </div>
+      )
+    }
+  }
+
   return (
     <div>
-      <nav className="bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="bg-green-100">
+        <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -18,40 +69,19 @@ export default function NavigationBar({ fixed }) {
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
-                  <a
-                    href="#"
-                    className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Dashboard
-                  </a>
-
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Team
-                  </a>
-
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Projects
-                  </a>
-
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Calendar
-                  </a>
-
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Reports
-                  </a>
+                  {loggedInLinks()}
+                  <div className="flex items-center justify-center bg-green-50">
+                    <form method="GET">
+                      <div className="relative text-gray-600 focus-within:text-gray-400">
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                          <button type="submit" className="p-1 focus:outline-none focus:shadow-outline">
+                            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                          </button>
+                        </span>
+                        <input type="search" name="q" className="py-2 text-sm text-white bg-green-50 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search..." autoComplete="off"/>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -118,35 +148,14 @@ export default function NavigationBar({ fixed }) {
                   href="#"
                   className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Dashboard
+                  Login
                 </a>
 
                 <a
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Team
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Projects
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Calendar
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Reports
+                  Sign up
                 </a>
               </div>
             </div>
