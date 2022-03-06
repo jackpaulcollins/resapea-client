@@ -36,19 +36,19 @@ export default function NavigationBar(props) {
     } else {
       return (
         <div>
-          <a
-          href="/login"
-          className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
-        >
-          Login
-        </a>
+          <button
+            onClick={() => navigate('/login')}
+            className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+            >
+            Login
+          </button>
 
-        <a
-          href="/register"
-          className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
-        >
-          Sign up
-        </a>
+           <button
+            onClick={() => navigate('/register')}
+            className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Sign up
+         </button>
     </div>
       )
     }
