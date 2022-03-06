@@ -52,18 +52,17 @@ const Login = (props) => {
   }
   
   return (
-    <div className="place-content-center">
-      <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+    <div className="flex justify-center items-center h-screen">
+      <div className="p-6 rounded-lg shadow-lg bg-white max-w-none">
         <form onSubmit={e => handleSubmit(e)}>
           <div className="form-group mb-6">
-            <label htmlFor="exampleInputEmail1" className="form-label inline-block mb-2 text-gray-700">Email address</label>
+            <label className="form-label inline-block mb-2 text-gray-700">Email address</label>
             <input 
               type="email" 
               name="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               className="form-control
-              block
               w-full
               px-3
               py-1.5
@@ -80,7 +79,7 @@ const Login = (props) => {
               aria-describedby="emailHelp" placeholder="Enter email"/>
           </div>
           <div className="form-group mb-6">
-            <label htmlFor="exampleInputPassword1" className="form-label inline-block mb-2 text-gray-700">Password</label>
+            <label className="form-label inline-block mb-2 text-gray-700">Password</label>
             <input 
               type="password"
               name="email"
