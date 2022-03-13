@@ -4,9 +4,10 @@ import Login from './auth/Login';
 import Registration from './auth/Registration';
 import RequestForgotPassword from './auth/RequestForgotPassword';
 import ResetPassword from './auth/ResetPassword';
-import Home from '../components/Home';
 import NavigationBar from '../components/NavigationBar';
+import RecipeView from '../components/recipe/RecipeView'
 import { API_ROOT } from '../apiRoot';
+import Dashboard from './Dashboard';
 
 
 const App = () => {
@@ -56,7 +57,14 @@ const App = () => {
     <div>
       <NavigationBar user={user} logout={logout} />
       <Routes>
-        <Route path={"/"} element={<Home />} />
+          <Route path={"/"} element={
+                              <Dashboard 
+                              loggedIn={loggedIn} 
+                              />} />
+          <Route path={"/recipe/:id"} element={
+                    <RecipeView 
+                    loggedIn={loggedIn} 
+                    />} />
           <Route path={"/login"} 
                 element={
                   <Login
