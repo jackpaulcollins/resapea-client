@@ -5,7 +5,8 @@ import Registration from './auth/Registration';
 import RequestForgotPassword from './auth/RequestForgotPassword';
 import ResetPassword from './auth/ResetPassword';
 import NavigationBar from '../components/NavigationBar';
-import RecipeView from '../components/recipe/RecipeView'
+import RecipeView from '../components/recipe/RecipeView';
+import RecipeCreate from '../components/recipe/RecipeCreate'
 import { API_ROOT } from '../apiRoot';
 import Dashboard from './Dashboard';
 
@@ -63,6 +64,10 @@ const App = () => {
                               />} />
           <Route path={"/recipe/:id"} element={
                     <RecipeView 
+                    loggedIn={loggedIn} 
+                    />} />
+          <Route path={"/create-recipe"} element={
+                    <RecipeCreate 
                     loggedIn={loggedIn} 
                     />} />
           <Route path={"/login"} 
