@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { API_ROOT } from '../../apiRoot'
-import CilCaretTop from '../icons/CilCaretTop'
-import CilCaretBottom from '../icons/CilCaretBottom'
+import UpvoteIcon from '../icons/UpvoteIcon'
+import DownvoteIcon from '../icons/DownvoteIcon'
 
 const RecipeFeed = () => {
   const [recipes, setRecipes] = useState();
@@ -15,7 +15,7 @@ const RecipeFeed = () => {
     fetch(`${API_ROOT}/api/recipes`)
     .then(response => response.json())
     .then(data => {
-      setRecipes(data.data)
+      setRecipes(JSON.parse(data.data))
       });
   }
 
@@ -29,21 +29,21 @@ const RecipeFeed = () => {
                 <li className="py-4 w-fit ml-20 mr-20">
                   <div className="flex items-center space-x-3">
                     <div className="align-middle">
-                      <button><CilCaretTop /></button>
+                      <button><UpvoteIcon /></button>
                       <p>23</p>
-                      <button><CilCaretBottom /></button>
+                      <button><DownvoteIcon /></button>
                     </div>
                       <div className="flex-1 space-y-1">
                         <div className="flex justify-between">
                           <h3 className="text-sm font-medium">{recipe.name}</h3>
-                          <p className="text-sm text-gray-500">Difficulty: easy</p>
+                          <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
                         </div>
                         <div className="flex items-center justify-between text-sm text-gray-500">
                           <p>
-                            Simple, easy dish for two!
+                            {recipe.genre}
                           </p>
                           <p>
-                            Comments: 2
+                            Comments: 0
                           </p>
                         </div>
                       </div>

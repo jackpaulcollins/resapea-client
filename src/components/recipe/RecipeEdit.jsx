@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { API_ROOT } from '../../apiRoot';
-import InstructionsInputList from '../forms/InstructionsInputList';
-import IngredientsDetailsInputList from '../forms/IngredientsDetailsInputList';
+import InstructionsEditList from '../forms/InstructionsEditList';
+import IngredientsDetailsEditList from '../forms/IngredientsDetailsEditList';
+import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
 
 
 const RecipeEdit = props => {
-  const [ recipeName, setRecipeName ] = useState('')
-  const [ recipeGenre, setRecipeGenre ]= useState('')
-  const [ instructions, setInstructions ] = useState([])
-  const [ ingredients, setIngredients ] = useState([])
+  const location = useLocation();
+  const  recipeId  = location.state.recipe.id
+  const [ recipe, setRecipe ] = useState({})
+  const [ recipeName, setRecipeName ] = useState(undefined)
+  const [ recipeGenre, setRecipeGenre ]= useState(undefined)
+  const [ instructions, setInstructions ] = useState(undefined)
+  const [ ingredients, setIngredients ] = useState(undefined)
+
+  useEffect(() => {
+    fetchRecipeData()
+  }, [])
+
+  async function fetchRecipeData() {
+    fetch(`${API_ROOT}/api/recipes/${recipeId}`, {
+      headers: {'Content-Type': 'application/json'},
+      credentials: 'include',
+      withCredentials: true,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        data = JSON.parse(data.recipe)
+        setRecipe(data)
+        setIngredients(data.recipe_ingredients)
+        setInstructions(data.instructions)
+      }
+    })
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const body = { 
       recipe: {
-        user_id: props.currentUser.id,
+        id: recipe.id,
         name: recipeName,
         genre: recipeGenre,
         recipe_ingredients_attributes: ingredients,
@@ -25,9 +50,9 @@ const RecipeEdit = props => {
       }
     }
 
-    fetch(`${API_ROOT}/api/recipes`, {
+    fetch(`${API_ROOT}/api/recipes/${recipe.id}`, {
       headers: {'Content-Type': 'application/json'},
-      method: 'post',
+      method: 'put',
       credentials: 'include',
       withCredentials: true,
       body: JSON.stringify(body)
@@ -38,6 +63,25 @@ const RecipeEdit = props => {
         data = JSON.parse(data.recipe)
         setIngredients(data.recipe_ingredients)
         setInstructions(data.instructions)
+      }
+    });
+  }
+
+  async function handleRecipeDelete() {
+
+    const body = { recipe: recipe }
+
+    fetch(`${API_ROOT}/api/recipes/${recipe.id}`, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'delete',
+      credentials: 'include',
+      withCredentials: true,
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        alert("Recipe Deleted!");
       }
     });
   }
@@ -78,13 +122,14 @@ const RecipeEdit = props => {
       <div className="w-1/2 rounded-lg shadow-lg bg-white">
         <form onSubmit={e => handleSubmit(e)}>
           <div>
-            <h5 className="text-center mt-2 text-xl">Create Your Recipe</h5>
+            <h5 className="text-center mt-2 text-xl">Change Your Recipe</h5>
             <div className="form-group flex mt-3 mb-6 place-content-around items-baseline">
               <div>
                 <label className="mr-2 form-label inline-block mb-2 text-gray-700">Recipe Title</label>
                 <input
                   type="text"
                   name="recipeTitle"
+                  defaultValue={recipe.name}
                   onChange={(e) => setRecipeName(e.target.value)}
                   className="form-control
                   w-max
@@ -107,6 +152,7 @@ const RecipeEdit = props => {
                   <input
                     type="text"
                     name="recipeTitle"
+                    defaultValue={recipe.genre}
                     onChange={(e) => setRecipeGenre(e.target.value)}
                     className="form-control
                     w-max
@@ -129,7 +175,7 @@ const RecipeEdit = props => {
           <div>
             <div className="p-5">
               <p>Ingredients</p>
-              <IngredientsDetailsInputList ingredients={ingredients}
+              <IngredientsDetailsEditList ingredients={ingredients}
                                                   addElementToRecipeIngredientsOrInstructionsArray={addElementToRecipeIngredientsOrInstructionsArray}
                                                   removeIngredientFromIngredientsArray={removeIngredientFromIngredientsArray}
                                                   updateIngredientInIngredientsArray={updateIngredientInIngredientsArray}
@@ -143,7 +189,7 @@ const RecipeEdit = props => {
           <div>
             <div className="p-5">
               <p>Instructions</p>
-              <InstructionsInputList instructions={instructions}
+              <InstructionsEditList instructions={instructions}
                                     addElementToRecipeIngredientsOrInstructionsArray={addElementToRecipeIngredientsOrInstructionsArray}
                                     removeInstructionFromInstructionsArray={removeInstructionFromInstructionsArray}
                                     updateInstructionInInstructionsArray={updateInstructionInInstructionsArray}
@@ -175,6 +221,7 @@ const RecipeEdit = props => {
               duration-150
               ease-in-out"
               >Submit</button>
+              <RecipeDelete handleRecipeDelete={handleRecipeDelete}/>
             </div>
         </form>
       </div>

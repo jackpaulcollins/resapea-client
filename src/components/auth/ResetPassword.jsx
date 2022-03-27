@@ -3,17 +3,21 @@ import { API_ROOT } from '../../apiRoot'
 import { useParams } from 'react-router-dom'
 
 const ResetPassword = () => {
+
+  const params = useParams();
+  const paramToken = params.token;
+
   useEffect(() => {
     setToken(
-      params.token.split("=")[1].toString()
+      paramToken.split("=")[1].toString()
     )
-  },[]);
+  },[paramToken]);
 
   const [ password, setPassword ] = useState('');
   const [ passwordConfirmation, setPasswordConfirmation  ] = useState('');
   const [ token, setToken ] = useState('');
   const [ message, setMessage ] = useState({});
-  const params = useParams();
+  
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,7 +40,6 @@ const ResetPassword = () => {
       .then(response => response.json())
       .then(data => {
         if (data) {
-          console.log(data)
           setMessage({
             status: data.status,
             message: data.message

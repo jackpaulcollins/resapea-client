@@ -12,7 +12,7 @@ const Login = (props) => {
     if (props.loggedIn === "LOGGED_IN"){
       navigate("/")
     }
-  }, [props.loggedIn])
+  }, [props.loggedIn, navigate])
 
   async function handleSubmit(e) {
     e.preventDefault();
