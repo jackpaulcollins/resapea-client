@@ -7,8 +7,9 @@ import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
 
 
-const RecipeEdit = props => {
+const RecipeEdit = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const  recipeId  = location.state.recipe.id
   const [ recipe, setRecipe ] = useState({})
   const [ recipeName, setRecipeName ] = useState(undefined)
@@ -40,6 +41,12 @@ const RecipeEdit = props => {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    //short circuit if instructions and ingredients haven't beed added
+    if (ingredients.length === 0 || instructions.length === 0){
+      alert("ingredients and instructions are required")
+      return
+    }
+
     const body = { 
       recipe: {
         id: recipe.id,
@@ -63,6 +70,7 @@ const RecipeEdit = props => {
         data = JSON.parse(data.recipe)
         setIngredients(data.recipe_ingredients)
         setInstructions(data.instructions)
+        alert('Recipe updated!')
       }
     });
   }
@@ -82,6 +90,7 @@ const RecipeEdit = props => {
     .then(data => {
       if (data.status === 200) {
         alert("Recipe Deleted!");
+        navigate('/')
       }
     });
   }
@@ -102,7 +111,7 @@ const RecipeEdit = props => {
     if (typeOfAdd === "ing") {
       setIngredients((prevIngredients) => [...prevIngredients, {}]);
     } else {
-      setInstructions((prevInstructions) => [...prevInstructions, {}]);
+      setInstructions((prevInstructions) => [...prevInstructions, { position: instructions.length + 1 }]);
     }
   };
 
@@ -131,6 +140,7 @@ const RecipeEdit = props => {
                   name="recipeTitle"
                   defaultValue={recipe.name}
                   onChange={(e) => setRecipeName(e.target.value)}
+                  required
                   className="form-control
                   w-max
                   px-3
@@ -154,6 +164,7 @@ const RecipeEdit = props => {
                     name="recipeTitle"
                     defaultValue={recipe.genre}
                     onChange={(e) => setRecipeGenre(e.target.value)}
+                    required
                     className="form-control
                     w-max
                     px-3
@@ -225,7 +236,6 @@ const RecipeEdit = props => {
             </div>
         </form>
       </div>
-      
     </div>
   )
 }

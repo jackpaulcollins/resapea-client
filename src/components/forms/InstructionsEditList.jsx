@@ -64,6 +64,13 @@ const InstructionsEditItem = (props) => {
 const InstructionsEditList = (props) => {
   const renderInstructionsItems = () => {
     if (props.instructions) {
+      props.instructions.sort((a, b) => {
+        if (a.position > b.position) {
+          return 1
+        } else {
+          return -1
+        }
+      })
       return props.instructions.map((instruction, index) => {
         return <InstructionsEditItem
                   key={index} 

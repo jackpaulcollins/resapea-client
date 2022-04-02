@@ -28,7 +28,7 @@ const RecipeFeed = () => {
               <Link key={recipe.id} to={`/recipe/${recipe.id}`} state={{ recipe: recipe }}>
                 <li className="py-4 w-fit ml-20 mr-20">
                   <div className="flex items-center space-x-3">
-                    <div className="align-middle">
+                    <div className="align-middle divide">
                       <button><UpvoteIcon /></button>
                       <p>23</p>
                       <button><DownvoteIcon /></button>
@@ -43,7 +43,7 @@ const RecipeFeed = () => {
                             {recipe.genre}
                           </p>
                           <p>
-                            Comments: 0
+                            Comments: {recipe.comments.length}
                           </p>
                         </div>
                       </div>

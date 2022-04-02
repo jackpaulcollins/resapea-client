@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_ROOT } from '../../apiRoot';
 import InstructionsInputList from '../forms/InstructionsInputList';
 import IngredientsDetailsInputList from '../forms/IngredientsDetailsInputList';
 import PlusIcon from '../icons/plusIcon'
 
 
-const RecipeEdit = props => {
+const RecipeCreate = props => {
+  const navigate = useNavigate();
   const [ recipeName, setRecipeName ] = useState('')
   const [ recipeGenre, setRecipeGenre ]= useState('')
   const [ instructions, setInstructions ] = useState([])
@@ -14,6 +15,12 @@ const RecipeEdit = props => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    //short circuit if instructions and ingredients haven't beed added
+    if (ingredients.length === 0 || instructions.length === 0){
+      alert("ingredients and instructions are required")
+      return
+    }
 
     const body = { 
       recipe: {
@@ -35,9 +42,8 @@ const RecipeEdit = props => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200){
-        data = JSON.parse(data.recipe)
-        setIngredients(data.recipe_ingredients)
-        setInstructions(data.instructions)
+        alert('Recipe created!')
+        navigate('/')
       }
     });
   }
@@ -53,12 +59,16 @@ const RecipeEdit = props => {
     setIngredients(tmp);
   };
 
+  // const setPosition = () => {
+  //   instructions.length === 0 ? 
+  // }
+
   const addElementToRecipeIngredientsOrInstructionsArray = (e, typeOfAdd) => {
     e.preventDefault();
     if (typeOfAdd === "ing") {
       setIngredients((prevIngredients) => [...prevIngredients, {}]);
     } else {
-      setInstructions((prevInstructions) => [...prevInstructions, {}]);
+      setInstructions((prevInstructions) => [...prevInstructions, { position: instructions.length + 1}]);
     }
   };
 
@@ -86,6 +96,7 @@ const RecipeEdit = props => {
                   type="text"
                   name="recipeTitle"
                   onChange={(e) => setRecipeName(e.target.value)}
+                  required
                   className="form-control
                   w-max
                   px-3
@@ -108,6 +119,7 @@ const RecipeEdit = props => {
                     type="text"
                     name="recipeTitle"
                     onChange={(e) => setRecipeGenre(e.target.value)}
+                    required
                     className="form-control
                     w-max
                     px-3
@@ -147,8 +159,7 @@ const RecipeEdit = props => {
                                     addElementToRecipeIngredientsOrInstructionsArray={addElementToRecipeIngredientsOrInstructionsArray}
                                     removeInstructionFromInstructionsArray={removeInstructionFromInstructionsArray}
                                     updateInstructionInInstructionsArray={updateInstructionInInstructionsArray}
-              /> 
-                                 
+              />           
               <div className="mt-3 mb-3">
                 <button className="text-blue-400" onClick={(e)=> addElementToRecipeIngredientsOrInstructionsArray(e, "ins")}><PlusIcon/></button>
               </div>
@@ -183,4 +194,4 @@ const RecipeEdit = props => {
   )
 }
 
-export default RecipeEdit;
+export default RecipeCreate;
