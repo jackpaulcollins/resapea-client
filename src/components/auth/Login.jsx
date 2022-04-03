@@ -6,6 +6,7 @@ const Login = (props) => {
   const navigate = useNavigate();
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
+  const [ rememberMe, setRememberMe ] = useState(false);
   const [ authErrorState, setAuthErrorState ] = useState({ isError: false})
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const Login = (props) => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-   const body = { user: { email: email, password: password }}
+   const body = { user: { email: email, password: password, remember_me: rememberMe }}
 
     fetch(`${API_ROOT}/api/sessions`, {
       headers: {'Content-Type': 'application/json'},
@@ -118,6 +119,19 @@ const Login = (props) => {
             <a href="/register"
               className="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out">Sign Up!
             </a>
+          </div>
+          <div className="flex items-center mb-6">
+          <input 
+            id="remember-me" 
+            name="remember-me" 
+            type="checkbox" 
+            value={rememberMe}
+            onClick={() => setRememberMe(!rememberMe)}
+            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+          </input>
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                Remember me
+              </label>
           </div>
           <button type="submit" className="
             px-6

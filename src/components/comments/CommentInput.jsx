@@ -27,6 +27,8 @@ const CommentInput = (props) => {
     .then(data => {
       if (data.status === 200){
         props.triggerCommentRefetch();
+      } else if (data.status === 500 && data.message[0] === "User must exist") {
+        alert("Please login or signup")
       }
     });
   }

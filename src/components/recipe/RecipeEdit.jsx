@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_ROOT } from '../../apiRoot';
 import InstructionsEditList from '../forms/InstructionsEditList';
 import IngredientsDetailsEditList from '../forms/IngredientsDetailsEditList';
 import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
 
-
-const RecipeEdit = () => {
-  const location = useLocation();
+const RecipeEdit = (props) => {
   const navigate = useNavigate();
-  const  recipeId  = location.state.recipe.id
+  const params = useParams();
+  const recipeId = params.id
   const [ recipe, setRecipe ] = useState({})
   const [ recipeName, setRecipeName ] = useState(undefined)
   const [ recipeGenre, setRecipeGenre ]= useState(undefined)
@@ -18,8 +17,15 @@ const RecipeEdit = () => {
   const [ ingredients, setIngredients ] = useState(undefined)
 
   useEffect(() => {
+    ensureLoggedInUser()
     fetchRecipeData()
   }, [])
+
+  const ensureLoggedInUser = () => {
+    if (props.loggedIn !== "LOGGED_IN") {
+      return navigate('/')
+    }
+  }
 
   async function fetchRecipeData() {
     fetch(`${API_ROOT}/api/recipes/${recipeId}`, {

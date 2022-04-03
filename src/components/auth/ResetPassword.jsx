@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { API_ROOT } from '../../apiRoot'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const ResetPassword = () => {
-
+  const navigate = useNavigate();
   const params = useParams();
   const paramToken = params.token;
 
@@ -39,12 +39,18 @@ const ResetPassword = () => {
       })
       .then(response => response.json())
       .then(data => {
-        if (data) {
+        if (data.status === 200) {
           setMessage({
             status: data.status,
             message: data.message
           });
-        } 
+          setTimeout(() => {navigate('/')}, 1500);
+        } else {
+          setMessage({
+            status: data.status,
+            message: data.message
+          });
+        }
       })
     }
   }
