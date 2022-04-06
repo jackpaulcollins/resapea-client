@@ -1,8 +1,20 @@
 import React from 'react'
 
 export function DownvoteIcon(props) {
+  const { user_voted_on_resource, user_vote_value } = props.userVote ? props.userVote : {}
+
+  const fillColor = () => {
+    if (user_voted_on_resource && user_vote_value === -1) {
+      return "purple"
+    } else {
+      return "none"
+    }
+  }
+
   return (
-    <svg width="1em" height="1em" viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M256.286 408.357L16.333 138.548V104H496v36.45ZM56.892 136l199.466 224.287L457.042 136Z"></path></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={fillColor()} fillOpacity={0.2} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+    </svg>
   )
 }
 export default DownvoteIcon

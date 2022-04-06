@@ -23,7 +23,7 @@ const Dashboard = props => {
           </button>
         </div>
         <div>
-          <RecipeFeed />
+          <RecipeFeed currentUserId={props.currentUserId} />
         </div>
       </div>
     )

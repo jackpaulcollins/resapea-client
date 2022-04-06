@@ -1,8 +1,21 @@
 import React from 'react'
 
 export function UpvoteIcon(props) {
+
+  const { user_voted_on_resource, user_vote_value } = props.userVote ? props.userVote : {}
+
+  const fillColor = () => {
+    if (user_voted_on_resource && user_vote_value === 1) {
+      return "orange"
+    } else {
+      return "none"
+    }
+  }
+
   return (
-    <svg width="1em" height="1em" viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M496 400.357H16.333v-36.449L256.047 96L496 365.81Zm-440.708-32h400.149L255.975 144.07Z"></path></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill={fillColor()} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" />
+    </svg>
   )
 }
 export default UpvoteIcon

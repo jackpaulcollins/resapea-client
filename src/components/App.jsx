@@ -10,6 +10,7 @@ import RecipeCreate from '../components/recipe/RecipeCreate'
 import RecipeEdit from '../components/recipe/RecipeEdit'
 import { API_ROOT } from '../apiRoot';
 import Dashboard from './Dashboard';
+import SearchResults from './SearchResults'
 
 
 const App = () => {
@@ -61,7 +62,8 @@ const App = () => {
       <Routes>
           <Route path={"/"} element={
                               <Dashboard 
-                              loggedIn={loggedIn} 
+                              loggedIn={loggedIn}
+                              currentUserId={user.id}
                               />} />
           <Route path={"/recipe/:id"} element={
                     <RecipeView 
@@ -101,7 +103,12 @@ const App = () => {
                 element={
                   <ResetPassword />
                 } 
-        />
+          />
+          <Route path={"/search-results"}
+                element={
+                  <SearchResults />
+                } 
+          />
       </Routes>
     </div>
   );

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
-import { API_ROOT } from '../../apiRoot'
-import UpvoteIcon from '../icons/UpvoteIcon'
-import DownvoteIcon from '../icons/DownvoteIcon'
+import { API_ROOT } from '../../apiRoot';
+import RecipeLineItemForFeed from './RecipeLineItemForFeed';
 
-const RecipeFeed = () => {
+
+const RecipeFeed = (props) => {
   const [recipes, setRecipes] = useState();
 
   useEffect(() => {
@@ -21,35 +20,12 @@ const RecipeFeed = () => {
 
   const renderRecipes = () => {
     if (recipes) {
+      console.log(recipes)
       return (
-        <div>
-          <ul className="divide-y divide-gray-200 w-2/3">
+        <div className="w-full flex flex-col items-center">
+          <ul className="w-2/3 divide-y-2 divide-gray-200">
             {recipes.map((recipe) => (
-              <Link key={recipe.id} to={`/recipe/${recipe.id}`} state={{ recipe: recipe }}>
-                <li className="py-4 w-fit ml-20 mr-20">
-                  <div className="flex items-center space-x-3">
-                    <div className="align-middle divide">
-                      <button><UpvoteIcon /></button>
-                      <p>23</p>
-                      <button><DownvoteIcon /></button>
-                    </div>
-                      <div className="flex-1 space-y-1">
-                        <div className="flex justify-between">
-                          <h3 className="text-sm font-medium">{recipe.name}</h3>
-                          <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
-                        </div>
-                        <div className="flex items-center justify-between text-sm text-gray-500">
-                          <p>
-                            {recipe.genre}
-                          </p>
-                          <p>
-                            Comments: {recipe.comments.length}
-                          </p>
-                        </div>
-                      </div>
-                  </div>
-                </li>
-              </Link>
+              <RecipeLineItemForFeed key={recipe.id} recipe={recipe} currentUserId={props.currentUserId} votes={recipe.votes} />
             ))}
           </ul>
         </div>

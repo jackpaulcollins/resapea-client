@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Transition } from "@headlessui/react";
+import { API_ROOT } from '../apiRoot';
 
 export default function NavigationBar(props) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [queryString, setQueryString] = useState("");
 
-  //if the user object contains an id it means a user is logged in
   const isLoggedIn = props.user.id ? true : false;
 
   const handleLogoutClick = () => {
@@ -14,12 +15,33 @@ export default function NavigationBar(props) {
     navigate("/")
   }
 
+  async function handleSubmit(e){
+    e.preventDefault();
+    const body = { recipe: { query_string: queryString }}
+    fetch(`${API_ROOT}/api/recipes_query`, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'post',
+      credentials: 'include',
+      withCredentials: true,
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        console.log(JSON.parse(data.data))
+        const recipes = JSON.parse(data.data)
+        navigate('search-results', { state: { recipes: recipes, currentUserId: props.user.id }})
+      }
+      });
+  }
+  
+
   const loggedInLinks = () => {
     if (isLoggedIn) {
       return (
         <div>
           <button
-            onClick={() => navigate('/#')}
+            onClick={() => navigate('/account')}
             className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
             >
             Account
@@ -61,24 +83,26 @@ export default function NavigationBar(props) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img
-                  className="h-8 w-8"
-                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                  alt="Workflow"
-                />
+                <button onClick={() => navigate('/')}>
+                  <img
+                    className="h-8 w-8"
+                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    alt="Workflow"
+                  />
+                </button>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   {loggedInLinks()}
                   <div className="flex items-center justify-center bg-green-50">
-                    <form method="GET">
+                    <form onSubmit={(e) => handleSubmit(e)}>
                       <div className="relative text-gray-600 focus-within:text-gray-400">
                         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                           <button type="submit" className="p-1 focus:outline-none focus:shadow-outline">
                             <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                           </button>
                         </span>
-                        <input type="search" name="q" className="py-2 text-sm text-white bg-green-50 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search..." autoComplete="off"/>
+                        <input onChange={e => setQueryString(e.target.value)}type="search" name="q" className="py-2 text-sm text-white bg-green-50 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search by name" autoComplete="off"/>
                       </div>
                     </form>
                   </div>
