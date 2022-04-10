@@ -7,6 +7,7 @@ import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
 
 const RecipeEdit = (props) => {
+  const { loggedIn } = props;
   const navigate = useNavigate();
   const params = useParams();
   const recipeId = params.id
@@ -22,7 +23,7 @@ const RecipeEdit = (props) => {
   }, [])
 
   const ensureLoggedInUser = () => {
-    if (props.loggedIn !== "LOGGED_IN") {
+    if (loggedIn !== "LOGGED_IN") {
       return navigate('/')
     }
   }

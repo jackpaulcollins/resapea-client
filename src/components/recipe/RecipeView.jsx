@@ -6,6 +6,7 @@ import CommentSection from '../comments/CommentSection'
 const RecipeView = (props) => {
   const location = useLocation();
   const { recipe } = location.state
+  const { currentUser } = props;
 
   const renderIngredients = () => {
     if (recipe) {
@@ -33,12 +34,12 @@ const RecipeView = (props) => {
   return (
     <div className="flex-col">
       <div className="flex w-screen justify-center mt-20 rounded">
-        <div className="w-1/2 shadow-lg bg-purple-200 rounded">
+        <div className="w-1/2 shadow-lg bg-gray-50 rounded">
           <div className="flex justify-center items-baseline rounded">
             <h1 className="text-xl pt-2">{recipe.name}</h1>
             <p className="text-xs ml-2 gray-200">{recipe.genre}</p>
           </div>
-          <div className="flex-row w-full bg-indigo-50 shadow-lg">
+          <div className="flex-row w-full shadow-lg">
             <div className="flex flex-col m-auto items-start w-11/12 mt-2 bg-indigo-10 p-5">
               <div className="text-xl mb-3">Ingredients</div>
               <ul className="list ml-2 border-b-2 divide-y">{renderIngredients()}</ul>
@@ -46,12 +47,12 @@ const RecipeView = (props) => {
               <ul className="list ml-2 divide-y">{renderInsctructions()}</ul>
             </div>
             <div className="mt-1 ml-2">
-              <SubNav recipe={recipe} currentUser={props.currentUser}/>
+              <SubNav recipe={recipe} currentUser={currentUser}/>
            </div>
           </div>
         </div>
       </div>
-      <CommentSection recipeId={recipe.id} userId={props.currentUser.id} />
+      <CommentSection recipeId={recipe.id} userId={currentUser.id} />
     </div>
   )
 }

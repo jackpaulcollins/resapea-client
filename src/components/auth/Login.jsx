@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { API_ROOT } from '../../apiRoot'
 
 const Login = (props) => {
+  const { loggedIn, handleLogin } = props;
   const navigate = useNavigate();
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ rememberMe, setRememberMe ] = useState(false);
-  const [ authErrorState, setAuthErrorState ] = useState({ isError: false})
+  const [ authErrorState, setAuthErrorState ] = useState({ isError: false});
 
   useEffect(() => {
-    if (props.loggedIn === "LOGGED_IN"){
+    if (loggedIn === "LOGGED_IN"){
       navigate("/")
     }
-  }, [props.loggedIn, navigate])
+  }, [loggedIn, navigate])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,7 +31,7 @@ const Login = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'created' && data.user){
-        props.handleLogin(data)
+        handleLogin(data)
         navigate("/");
       } else
       {

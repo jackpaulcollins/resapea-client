@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MinusIcon from '../icons/minusIcon'
 import { API_ROOT } from '../../apiRoot';
 
 const InstructionsEditItem = (props) => {
-
+  const { instruction, 
+          removeInstructionFromInstructionsArray, 
+          position, 
+          length, 
+          updateInstructionInInstructionsArray } = props;
   async function handleInstructionDelete(e, instruction) {
     e.preventDefault();
 
@@ -23,23 +27,23 @@ const InstructionsEditItem = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200) {
-        props.removeInstructionFromInstructionsArray()
+        removeInstructionFromInstructionsArray()
       }
     });
   }
 
   const maybeRenderDeleteIcon = () => {
-    if (props.position === (props.length -1)) {
+    if (position === (length -1)) {
       //since only an instruction with an id
       //requires AJAX we will only remove the JS
       //if no id present
-      if (props.instruction.id) {
+      if (instruction.id) {
         return (
-          <button className="ml-2 text-red-400"  onClick={(e) => handleInstructionDelete(e, props.instruction)}><MinusIcon/></button>
+          <button className="ml-2 text-red-400"  onClick={(e) => handleInstructionDelete(e, instruction)}><MinusIcon/></button>
         )
       } else {
         return (
-          <button className="ml-2 text-red-400"  onClick={(e) => props.removeInstructionFromInstructionsArray()}><MinusIcon/></button>
+          <button className="ml-2 text-red-400"  onClick={(e) => removeInstructionFromInstructionsArray()}><MinusIcon/></button>
         )
       }
     }
@@ -53,8 +57,8 @@ const InstructionsEditItem = (props) => {
         name="instruction"
         id="instruction"
         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-        defaultValue={props.instruction.content}
-        onChange={(e) => props.updateInstructionInInstructionsArray(props.position, e.target.value)}
+        defaultValue={instruction.content}
+        onChange={(e) => updateInstructionInInstructionsArray(position, e.target.value)}
       />
       {maybeRenderDeleteIcon()}
     </div>
@@ -62,23 +66,24 @@ const InstructionsEditItem = (props) => {
 }
 
 const InstructionsEditList = (props) => {
+  const { instructions, removeInstructionFromInstructionsArray, updateInstructionInInstructionsArray } = props;
   const renderInstructionsItems = () => {
-    if (props.instructions) {
-      props.instructions.sort((a, b) => {
+    if (instructions) {
+      instructions.sort((a, b) => {
         if (a.position > b.position) {
           return 1
         } else {
           return -1
         }
       })
-      return props.instructions.map((instruction, index) => {
+      return instructions.map((instruction, index) => {
         return <InstructionsEditItem
                   key={index} 
                   position={index}
-                  length={props.instructions.length}
+                  length={instructions.length}
                   instruction={instruction}
-                  removeInstructionFromInstructionsArray={props.removeInstructionFromInstructionsArray}
-                  updateInstructionInInstructionsArray={props.updateInstructionInInstructionsArray}
+                  removeInstructionFromInstructionsArray={removeInstructionFromInstructionsArray}
+                  updateInstructionInInstructionsArray={updateInstructionInInstructionsArray}
                 />;
       });
     } else {

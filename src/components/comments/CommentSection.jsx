@@ -5,7 +5,7 @@ import CommentInput from '../comments/CommentInput'
 
 
 const CommentSection = (props) => {
- 
+  const { recipeId, userId } = props;
   const [ comments, setComments ] = useState(undefined)
 
   useEffect(() => {
@@ -13,9 +13,8 @@ const CommentSection = (props) => {
   }, [])
 
   async function fetchComments() {
-    fetch(`${API_ROOT}/api/comments/${props.recipeId}`, {
+    fetch(`${API_ROOT}/api/comments/${recipeId}`, {
       headers: {'Content-Type': 'application/json'},
-      method: 'get',
       credentials: 'include',
       withCredentials: true,
     })
@@ -30,7 +29,13 @@ const CommentSection = (props) => {
   const renderComments = () => {
     if (comments) {
       return comments.map((comment, index) => {
-        return <Comment key={index} comment={comment} userId={props.userId} recipeId={props.recipeId} triggerCommentRefetch={fetchComments} />
+        return <Comment key={index} 
+                        comment={comment} 
+                        currentUserId={userId} 
+                        recipeId={recipeId} 
+                        votes = {comment.votes}
+                        triggerCommentRefetch={fetchComments} 
+                />
       })
     } else {
       return "No comments yet, add one!"
@@ -39,7 +44,7 @@ const CommentSection = (props) => {
 
   return (
     <div>
-      <CommentInput userId={props.userId} recipeId={props.recipeId} triggerCommentRefetch={fetchComments}/>
+      <CommentInput userId={userId} recipeId={recipeId} triggerCommentRefetch={fetchComments}/>
       <div className="flex flex-col w-full items-center justify-evenly">
         {renderComments()}
       </div>

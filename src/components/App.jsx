@@ -60,54 +60,68 @@ const App = () => {
     <div>
       <NavigationBar user={user} logout={logout} />
       <Routes>
-          <Route path={"/"} element={
-                              <Dashboard 
-                              loggedIn={loggedIn}
-                              currentUserId={user.id}
-                              />} />
-          <Route path={"/recipe/:id"} element={
-                    <RecipeView 
-                    loggedIn={loggedIn}
-                    currentUser={user} 
-                    />} />
-          <Route path={"/create-recipe"} element={
-                    <RecipeCreate 
-                    loggedIn={loggedIn}
-                    currentUser={user} 
-                    />} />
-          <Route path={"/recipe/:id/edit"} element={
-                    <RecipeEdit 
-                    loggedIn={loggedIn}
-                    currentUser={user} 
-                    />} />
+          <Route path={"/"} 
+                 element={
+                            <Dashboard 
+                            loggedIn={loggedIn}
+                            currentUserId={user.id}
+                            />
+                         } 
+          />
+          <Route path={"/recipe/:id"}
+                 element={
+                            <RecipeView 
+                            loggedIn={loggedIn}
+                            currentUser={user} 
+                            />
+                          } 
+          />
+          <Route path={"/create-recipe"}
+                 element={
+                            <RecipeCreate 
+                            loggedIn={loggedIn}
+                            currentUser={user} 
+                            />
+                          } 
+          />
+          <Route path={"/recipe/:id/edit"} 
+                 element={
+                          <RecipeEdit 
+                          loggedIn={loggedIn}
+                          currentUser={user} 
+                          />
+                        } 
+          />
           <Route path={"/login"} 
-                element={
-                  <Login
-                  loggedIn={loggedIn} 
-                  handleLogin={handleLogin}  
-                  />} 
+                 element={
+                            <Login
+                            loggedIn={loggedIn} 
+                            handleLogin={handleLogin}  
+                            />
+                          } 
           />
           <Route path={"/register"}
-                element={
-                  <Registration 
-                  loggedIn={loggedIn} 
-                  handleLogin={handleLogin} 
-                  />} 
+                 element={
+                            <Registration 
+                            loggedIn={loggedIn} 
+                            handleLogin={handleLogin} 
+                            />
+                          } 
           />
           <Route path={"/forgot_password"}
                 element={
-                  <RequestForgotPassword />
-                } 
+                          <RequestForgotPassword />
+                        } 
           />
           <Route path={"/password_reset/:token"}
-                element={
-                  <ResetPassword />
-                } 
+                 element={
+                            <ResetPassword />
+                         } 
           />
           <Route path={"/search-results"}
                 element={
-                  <SearchResults />
-                } 
+                          <SearchResults />
+                        } 
           />
       </Routes>
     </div>

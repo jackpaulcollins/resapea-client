@@ -4,6 +4,7 @@ import RecipeLineItemForFeed from './RecipeLineItemForFeed';
 
 
 const RecipeFeed = (props) => {
+  const { currentUserId } = props;
   const [recipes, setRecipes] = useState();
 
   useEffect(() => {
@@ -20,12 +21,11 @@ const RecipeFeed = (props) => {
 
   const renderRecipes = () => {
     if (recipes) {
-      console.log(recipes)
       return (
         <div className="w-full flex flex-col items-center">
           <ul className="w-2/3 divide-y-2 divide-gray-200">
             {recipes.map((recipe) => (
-              <RecipeLineItemForFeed key={recipe.id} recipe={recipe} currentUserId={props.currentUserId} votes={recipe.votes} />
+              <RecipeLineItemForFeed key={recipe.id} recipe={recipe} currentUserId={currentUserId} votes={recipe.votes} />
             ))}
           </ul>
         </div>

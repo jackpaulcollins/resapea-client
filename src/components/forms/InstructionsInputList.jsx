@@ -2,11 +2,15 @@ import React from 'react';
 import MinusIcon from '../icons/minusIcon'
 
 const InstructionsInputItem = (props) => {
-
+  const { position, 
+          length, 
+          instruction, 
+          removeInstructionFromInstructionsArray, 
+          updateInstructionInInstructionsArray } = props;
   const maybeRenderDeleteIcon = () => {
-    if (props.position === (props.length -1)) {
+    if (position === (length -1)) {
       return (
-        <button className="ml-2 text-red-400"  onClick={(e) => props.removeInstructionFromInstructionsArray()}><MinusIcon/></button>
+        <button className="ml-2 text-red-400"  onClick={(e) => removeInstructionFromInstructionsArray()}><MinusIcon/></button>
       )
     }
   }
@@ -19,8 +23,8 @@ const InstructionsInputItem = (props) => {
         name="instruction"
         id="instruction"
         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-        defaultValue={props.instruction.content}
-        onChange={(e) => props.updateInstructionInInstructionsArray(props.position, e.target.value)}
+        defaultValue={instruction.content}
+        onChange={(e) => updateInstructionInInstructionsArray(position, e.target.value)}
       />
       {maybeRenderDeleteIcon()}
     </div>
@@ -28,16 +32,17 @@ const InstructionsInputItem = (props) => {
 }
 
 const InstructionsInputList = (props) => {
+  const { instructions, removeInstructionFromInstructionsArray, updateInstructionInInstructionsArray } = props;
   const renderInstructionsItems = () => {
-    if (props.instructions) {
-      return props.instructions.map((instruction, index) => {
+    if (instructions) {
+      return instructions.map((instruction, index) => {
         return <InstructionsInputItem
                   key={index} 
                   position={index}
-                  length={props.instructions.length}
+                  length={instructions.length}
                   instruction={instruction}
-                  removeInstructionFromInstructionsArray={props.removeInstructionFromInstructionsArray}
-                  updateInstructionInInstructionsArray={props.updateInstructionInInstructionsArray}
+                  removeInstructionFromInstructionsArray={removeInstructionFromInstructionsArray}
+                  updateInstructionInInstructionsArray={updateInstructionInInstructionsArray}
                 />;
       });
     } else {

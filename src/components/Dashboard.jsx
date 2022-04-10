@@ -3,16 +3,18 @@ import RecipeFeed from './recipe/RecipeFeed'
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = props => {
+  const { loggedIn, currentUserId } = props;
   const navigate = useNavigate();
+
   const determineAddRecipeButtonAction = () => {
-    if (props.loggedIn === "NOT_LOGGED_IN") {
+    if (loggedIn === "NOT_LOGGED_IN") {
       alert("Please sign up or login to create a recipe!")
     } else {
       navigate('/create-recipe')
     }
   }
 
-  if (props.loggedIn) {
+  if (loggedIn) {
     return (
       <div className="flex-row">
         <div className="ml-4 mt-4 mb-3">
@@ -23,7 +25,7 @@ const Dashboard = props => {
           </button>
         </div>
         <div>
-          <RecipeFeed currentUserId={props.currentUserId} />
+          <RecipeFeed currentUserId={currentUserId} />
         </div>
       </div>
     )

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_ROOT } from '../../apiRoot'
 
 const Registration = (props) => {
+  const { handleLogin } = props;
   const navigate = useNavigate();
   const [ username, setUsername  ] = useState('');
   const [ email, setEmail ] = useState('');
@@ -16,7 +17,7 @@ const Registration = (props) => {
       ensurePasswordsMeetMinimum(password, passwordConfirmation)
       && ensurePasswordsMatch(password, passwordConfirmation)
       ) {
-        const body = {       
+        const body = {
           user: {
           email: email,
           username: username,
@@ -35,7 +36,7 @@ const Registration = (props) => {
     .then(response => response.json())
     .then(data => {
     if (data.status === 'created' && data.user){
-        props.handleLogin(data)
+        handleLogin(data)
         navigate("/");
       } else
         {

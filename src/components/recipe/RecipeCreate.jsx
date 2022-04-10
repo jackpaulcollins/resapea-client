@@ -6,7 +6,8 @@ import IngredientsDetailsInputList from '../forms/IngredientsDetailsInputList';
 import PlusIcon from '../icons/plusIcon'
 
 
-const RecipeCreate = props => {
+const RecipeCreate = (props) => {
+  const { currentUser } = props;
   const navigate = useNavigate();
   const [ recipeName, setRecipeName ] = useState('')
   const [ recipeGenre, setRecipeGenre ]= useState('')
@@ -24,7 +25,7 @@ const RecipeCreate = props => {
 
     const body = { 
       recipe: {
-        user_id: props.currentUser.id,
+        user_id: currentUser.id,
         name: recipeName,
         genre: recipeGenre,
         recipe_ingredients_attributes: ingredients,

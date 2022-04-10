@@ -3,16 +3,20 @@ import MinusIcon from '../icons/minusIcon'
 import { API_ROOT } from '../../apiRoot';
 
 const IngredientsEditItem = (props) => {
+  const { ingredient, 
+          removeIngredientFromIngredientsArray, 
+          position, 
+          length,
+          updateIngredientInIngredientsArray,
+        } = props;
 
   async function handleIngredientDelete(e, ingredient) {
     e.preventDefault();
-
     const body = { 
       recipe: {
-        ingredient_id: props.ingredient.id
+        ingredient_id: ingredient.id
       }
     }
-
     fetch(`${API_ROOT}/api/destroy_ingredient`, {
       headers: {'Content-Type': 'application/json'},
       method: 'delete',
@@ -23,20 +27,20 @@ const IngredientsEditItem = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200) {
-        props.removeIngredientFromIngredientsArray()
+        removeIngredientFromIngredientsArray()
       }
     });
   }
 
   const maybeRenderDeleteIcon = () => {
-    if (props.position === (props.length -1)) {
-      if (props.ingredient.id) {
+    if (position === (length -1)) {
+      if (ingredient.id) {
         return (
-          <button className="ml-2 text-red-400"  onClick={(e) => handleIngredientDelete(e, props.ingredient)}><MinusIcon/></button>
+          <button className="ml-2 text-red-400"  onClick={(e) => handleIngredientDelete(e, ingredient)}><MinusIcon/></button>
         )
       } else {
         return (
-          <button className="ml-2 text-red-400"  onClick={(e) => props.removeIngredientFromIngredientsArray()}><MinusIcon/></button>
+          <button className="ml-2 text-red-400"  onClick={(e) => removeIngredientFromIngredientsArray()}><MinusIcon/></button>
         )
       }
     }
@@ -53,8 +57,8 @@ const IngredientsEditItem = (props) => {
                min="0"
                name="measurement_unit_quantity"
                className="focus:ring-indigo-500 focus:border-indigo-500 block w-2/5 mr-1 sm:text-sm border-gray-300 rounded-md"
-               defaultValue={props.ingredient.measurement_unit_quantity}
-               onChange={(e) => props.updateIngredientInIngredientsArray("measurement_unit_quantity", props.position, e.target.value)}
+               defaultValue={ingredient.measurement_unit_quantity}
+               onChange={(e) => updateIngredientInIngredientsArray("measurement_unit_quantity", position, e.target.value)}
              />
  
              <div className="block inset-y-0 right-0 flex items-center">
@@ -64,8 +68,8 @@ const IngredientsEditItem = (props) => {
                <select
                  name="measurement_unit_type"
                  className="focus:ring-indigo-500 focus:border-indigo-500 w-30 h-full py-0 border-gray-300 bg-transparent text-black-500 sm:text-sm rounded-md"
-                 value={props.ingredient.measurement_unit_type}
-                 onChange={(e) => props.updateIngredientInIngredientsArray("measurement_unit_type", props.position, e.target.value)}
+                 value={ingredient.measurement_unit_type}
+                 onChange={(e) => updateIngredientInIngredientsArray("measurement_unit_type", position, e.target.value)}
                  required
                >
                  <option value=""></option>
@@ -86,8 +90,8 @@ const IngredientsEditItem = (props) => {
              type="text"
              id="ingredient_name"
              className="focus:ring-indigo-500 focus:border-indigo-500 block w-4/5 pl-7 pr-1 sm:text-sm border-gray-300 rounded-md"
-             defaultValue={props.ingredient.ingredient_name}
-             onChange={(e) => props.updateIngredientInIngredientsArray("ingredient_name", props.position, e.target.value)}
+             defaultValue={ingredient.ingredient_name}
+             onChange={(e) => updateIngredientInIngredientsArray("ingredient_name", position, e.target.value)}
            />
            {maybeRenderDeleteIcon()}
          </div>
@@ -97,17 +101,18 @@ const IngredientsEditItem = (props) => {
 }
 
 const IngredientsDetailsEditList = (props) => {
+  const { ingredients,removeIngredientFromIngredientsArray, updateIngredientInIngredientsArray } = props;
 
   const renderInstructionsItems = () => {
-    if (props.ingredients) {
-      return props.ingredients.map((ingredient, index) => {
+    if (ingredients) {
+      return ingredients.map((ingredient, index) => {
         return <IngredientsEditItem
                   key={index} 
                   position={index}
-                  length={props.ingredients.length}
+                  length={ingredients.length}
                   ingredient={ingredient}
-                  removeIngredientFromIngredientsArray={props.removeIngredientFromIngredientsArray}
-                  updateIngredientInIngredientsArray={props.updateIngredientInIngredientsArray}
+                  removeIngredientFromIngredientsArray={removeIngredientFromIngredientsArray}
+                  updateIngredientInIngredientsArray={updateIngredientInIngredientsArray}
                 />;
       });
     } else {

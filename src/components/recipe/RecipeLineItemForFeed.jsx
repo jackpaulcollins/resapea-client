@@ -14,11 +14,8 @@ import { Link } from 'react-router-dom';
 // Also, the up/down vote icon should then reflect whether the user has voted
 
 const RecipeLineItemForFeed = (props) => {
-
-  const { genre, id, instructions, name, recipe_ingredients, total_points , votes } = props.recipe;
-  const currentUserId = props.currentUserId
-
-  const [ initialVoteCount, setInitialVoteCount ] = useState(total_points)
+  const { recipe, total_points, votes, currentUserId } = props;
+  const [ initialVoteCount ] = useState(total_points)
   const [ newVoteCount, setNewVoteCount ] = useState(undefined)
   const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
 
@@ -31,7 +28,7 @@ const RecipeLineItemForFeed = (props) => {
 
   async function fetchVotes() {
     const body = { resource: {voteable_type: "Recipe" }}
-    fetch(`${API_ROOT}/api/fetch_votes/${props.recipe.id}`, {
+    fetch(`${API_ROOT}/api/fetch_votes/${recipe.id}`, {
       headers: {'Content-Type': 'application/json'},
       method: 'post',
       credentials: 'include',
@@ -41,7 +38,6 @@ const RecipeLineItemForFeed = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200) {
-        console.log(data)
         setNewVoteCount(data.vote_count)
         setUserVotedOnResource({
           user_voted_on_resource: data.user_voted_on_resource,
@@ -106,22 +102,22 @@ const RecipeLineItemForFeed = (props) => {
   return (
     <li className="flex flex-row py-2 content-between">
       <div className="flex flex-col w-2/12 items-center">
-        <button  onClick={() => upVote(props.recipe.id)}><UpvoteIcon userVote={userVotedOnResource} /></button>
+        <button  onClick={() => upVote(recipe.id)}><UpvoteIcon userVote={userVotedOnResource} /></button>
         <p>{newVoteCount !=undefined ? newVoteCount : initialVoteCount}</p>
-        <button onClick={() => downVote(props.recipe.id)}><DownvoteIcon userVote={userVotedOnResource} /></button>
+        <button onClick={() => downVote(recipe.id)}><DownvoteIcon userVote={userVotedOnResource} /></button>
       </div>
       <div className="flex flex-col w-full items-between space-x-3">
-        <Link to={`/recipe/${props.recipe.id}`} state={{ recipe: props.recipe }}>
+        <Link to={`/recipe/${recipe.id}`} state={{ recipe: recipe }}>
           <div className="flex flex-row justify-between mb-3">
-            <h3 className="text-xl font-medium">{props.recipe.name}</h3>
-            <p className="text-sm text-gray-500">Ingredients: {props.recipe.recipe_ingredients.length}</p>
+            <h3 className="text-xl font-medium">{recipe.name}</h3>
+            <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
           </div>
           <div className=" flex flex-row justify-between text-sm text-gray-500">
             <p>
-              {props.recipe.genre}
+              {recipe.genre}
             </p>
             <p>
-              Comments: {props.recipe.comments.length}
+              Comments: {recipe.comments.length}
             </p>
           </div>
         </Link>

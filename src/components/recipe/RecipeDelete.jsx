@@ -1,9 +1,10 @@
 import React from "react";
 
 const RecipeDelete = (props) => {
+  const { handleRecipeDelete } = props;
 
   const deleteRecipe = () => {
-    props.handleRecipeDelete()
+    handleRecipeDelete()
   }
   return(
     <button onClick={deleteRecipe}className="

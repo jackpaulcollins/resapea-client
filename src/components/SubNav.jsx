@@ -2,14 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 
 const SubNav = (props) => {
-
+  const { currentUser, recipe } = props;
   const maybeRenderEditLink = () => {
-    if (props.currentUser.id === props.recipe.user_id) {
+    if (currentUser.id === recipe.user_id) {
       return (
         <div>
           <Link 
-                    to= {`/recipe/${props.recipe.id}/edit`}
-                    state={{ recipe: props.recipe }}>
+                    to={`/recipe/${recipe.id}/edit`}
+                    state={{ recipe: recipe }}
+          >
             <button className="
               mb-1
               px-6

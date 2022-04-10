@@ -3,7 +3,7 @@ import { API_ROOT } from '../../apiRoot';
 
 
 const CommentInput = (props) => {
- 
+  const { recipeId, triggerCommentRefetch } = props;
   const [ comment, setComment ] = useState('')
 
   async function handleSubmit(e) {
@@ -11,7 +11,7 @@ const CommentInput = (props) => {
 
     const body = { 
       comment: {
-        recipe_id: props.recipeId,
+        recipe_id: recipeId,
         content: comment
       }
     }
@@ -26,7 +26,7 @@ const CommentInput = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200){
-        props.triggerCommentRefetch();
+        triggerCommentRefetch();
       } else if (data.status === 500 && data.message[0] === "User must exist") {
         alert("Please login or signup")
       }

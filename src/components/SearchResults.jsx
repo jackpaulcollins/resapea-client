@@ -6,7 +6,6 @@ const SearchResults = (props) => {
   const location = useLocation();
   const recipes  = location.state.recipes
   const currentUserId = location.state.currentUserId
-  console.log(location)
 
   const renderRecipes = () => {
     if (recipes) {

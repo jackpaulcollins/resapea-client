@@ -4,14 +4,15 @@ import { Transition } from "@headlessui/react";
 import { API_ROOT } from '../apiRoot';
 
 export default function NavigationBar(props) {
+  const { user, logout } = props;
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [queryString, setQueryString] = useState("");
 
-  const isLoggedIn = props.user.id ? true : false;
+  const isLoggedIn = user.id ? true : false;
 
   const handleLogoutClick = () => {
-    props.logout()
+    logout()
     navigate("/")
   }
 
@@ -28,9 +29,8 @@ export default function NavigationBar(props) {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200) {
-        console.log(JSON.parse(data.data))
         const recipes = JSON.parse(data.data)
-        navigate('search-results', { state: { recipes: recipes, currentUserId: props.user.id }})
+        navigate('search-results', { state: { recipes: recipes, currentUserId: user.id }})
       }
       });
   }
@@ -44,7 +44,7 @@ export default function NavigationBar(props) {
             onClick={() => navigate('/account')}
             className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
             >
-            Account
+            {JSON.stringify(user.username)}
           </button>
 
            <button

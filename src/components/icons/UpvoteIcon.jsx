@@ -1,8 +1,7 @@
 import React from 'react'
 
 export function UpvoteIcon(props) {
-
-  const { user_voted_on_resource, user_vote_value } = props.userVote ? props.userVote : {}
+  const { user_voted_on_resource, user_vote_value } = props ? props : {}
 
   const fillColor = () => {
     if (user_voted_on_resource && user_vote_value === 1) {
