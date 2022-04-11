@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import { API_ROOT } from '../apiRoot';
+import LogoIcon from '../components/icons/LogoIcon';
 
 export default function NavigationBar(props) {
   const { user, logout } = props;
@@ -83,12 +84,8 @@ export default function NavigationBar(props) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <button onClick={() => navigate('/')}>
-                  <img
-                    className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                    alt="Workflow"
-                  />
+                <button className="mt-1" onClick={() => navigate('/')}>
+                  <LogoIcon />
                 </button>
               </div>
               <div className="hidden md:block">

@@ -16,7 +16,7 @@ const Comment = (props) => {
     if (vote.length === 1) {
       setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
     }
-   }, [])
+   }, [props])
 
   async function handleSubmit(e) {
     e.preventDefault();

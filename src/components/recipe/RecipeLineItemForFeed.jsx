@@ -14,8 +14,8 @@ import { Link } from 'react-router-dom';
 // Also, the up/down vote icon should then reflect whether the user has voted
 
 const RecipeLineItemForFeed = (props) => {
-  const { recipe, total_points, votes, currentUserId } = props;
-  const [ initialVoteCount ] = useState(total_points)
+  const { recipe, votes, currentUserId } = props;
+  const [ initialVoteCount ] = useState(recipe.total_points)
   const [ newVoteCount, setNewVoteCount ] = useState(undefined)
   const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
 
@@ -24,7 +24,7 @@ const RecipeLineItemForFeed = (props) => {
    if (vote.length === 1) {
      setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
    }
-  }, [])
+  }, [props])
 
   async function fetchVotes() {
     const body = { resource: {voteable_type: "Recipe" }}
