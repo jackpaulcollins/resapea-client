@@ -10,7 +10,7 @@ const CommentSection = (props) => {
 
   useEffect(() => {
     fetchComments()
-  }, [])
+  },[])
 
   async function fetchComments() {
     fetch(`${API_ROOT}/api/comments/${recipeId}`, {

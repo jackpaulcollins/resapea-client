@@ -12,11 +12,11 @@ const Comment = (props) => {
   const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
 
   useEffect(() => {
-    const vote = votes.filter(vote => vote.user_id == currentUserId)
+    const vote = votes.filter(vote => vote.user_id === currentUserId)
     if (vote.length === 1) {
       setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
     }
-   }, [props])
+   }, [props, currentUserId, votes])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -187,7 +187,7 @@ const Comment = (props) => {
           <button onClick={() => upVote(comment.id)}>
             <UpvoteIcon userVote={userVotedOnResource}/>
           </button>
-           <span>{newVoteCount !=undefined ? newVoteCount : initialVoteCount}</span>
+           <span>{newVoteCount !== undefined ? newVoteCount : initialVoteCount}</span>
            <button onClick={() => downVote(comment.id)}>
             <DownvoteIcon userVote={userVotedOnResource}/>
           </button>

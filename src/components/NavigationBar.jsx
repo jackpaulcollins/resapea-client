@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import { API_ROOT } from '../apiRoot';
 import LogoIcon from '../components/icons/LogoIcon';
@@ -41,12 +41,12 @@ export default function NavigationBar(props) {
     if (isLoggedIn) {
       return (
         <div>
-          <button
-            onClick={() => navigate('/account')}
+          <Link
+            to={`/user/${user.id}/`}
             className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
             >
-            {JSON.stringify(user.username)}
-          </button>
+            {user.username}
+          </Link>
 
            <button
             onClick={() => handleLogoutClick()}

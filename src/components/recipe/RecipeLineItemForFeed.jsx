@@ -20,7 +20,7 @@ const RecipeLineItemForFeed = (props) => {
   const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
 
   useEffect(() => {
-   const vote = votes.filter(vote => vote.user_id == currentUserId)
+   const vote = votes.filter(vote => vote.user_id === currentUserId)
    if (vote.length === 1) {
      setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
    }
@@ -103,7 +103,7 @@ const RecipeLineItemForFeed = (props) => {
     <li className="flex flex-row py-2 content-between">
       <div className="flex flex-col w-2/12 items-center">
         <button  onClick={() => upVote(recipe.id)}><UpvoteIcon userVote={userVotedOnResource} /></button>
-        <p>{newVoteCount !=undefined ? newVoteCount : initialVoteCount}</p>
+        <p>{newVoteCount !== undefined ? newVoteCount : initialVoteCount}</p>
         <button onClick={() => downVote(recipe.id)}><DownvoteIcon userVote={userVotedOnResource} /></button>
       </div>
       <div className="flex flex-col w-full items-between space-x-3">

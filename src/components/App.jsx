@@ -8,6 +8,7 @@ import NavigationBar from '../components/NavigationBar';
 import RecipeView from '../components/recipe/RecipeView';
 import RecipeCreate from '../components/recipe/RecipeCreate'
 import RecipeEdit from '../components/recipe/RecipeEdit'
+import UserPanel from '../components/account/UserPanel'
 import { API_ROOT } from '../apiRoot';
 import Dashboard from './Dashboard';
 import SearchResults from './SearchResults'
@@ -121,6 +122,11 @@ const App = () => {
           <Route path={"/search-results"}
                 element={
                           <SearchResults />
+                        } 
+          />
+          <Route path={"/user/:id"}
+                element={
+                          <UserPanel user={user} />
                         } 
           />
       </Routes>
