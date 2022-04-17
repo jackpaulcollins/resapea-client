@@ -18,9 +18,9 @@ const App = () => {
 
   useEffect(() => {
     isLoggedIn()
-  });
+  }, []);
 
-  const [ loggedIn, setLoggedIn ] = useState('NOT_LOGGED_IN');
+  const [ loggedIn, setLoggedIn ] = useState("NOT_LOGGED_IN");
   const [ user, setUser ] = useState({});
 
   async function isLoggedIn() {
@@ -33,6 +33,9 @@ const App = () => {
       } else if (!data.logged_in && loggedIn === "LOGGED_IN") {
         setLoggedIn("NOT_LOGGED_IN")
         setUser({})
+      } else if (data.logged_in && loggedIn === "LOGGED_IN") {
+        //just refresh the user
+        setUser(data.user)
       }
     });
   }
@@ -126,7 +129,8 @@ const App = () => {
           />
           <Route path={"/user/:id"}
                 element={
-                          <UserPanel user={user} />
+                          <UserPanel currentUser={user}
+                                     refreshUser={isLoggedIn} />
                         } 
           />
       </Routes>

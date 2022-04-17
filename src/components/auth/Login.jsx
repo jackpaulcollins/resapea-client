@@ -18,9 +18,7 @@ const Login = (props) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-   const body = { user: { email: email, password: password, remember_me: rememberMe }}
-
+    const body = { user: { email: email, password: password, remember_me: rememberMe }}
     fetch(`${API_ROOT}/api/sessions`, {
       headers: {'Content-Type': 'application/json'},
       method: 'post',

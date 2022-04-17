@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UpvoteIcon from '../icons/UpvoteIcon';
 import DownvoteIcon from '../icons/DownvoteIcon';
+import CameraIcon from '../icons/CameraIcon';
 import { API_ROOT } from '../../apiRoot';
 import { Link } from 'react-router-dom';
 
@@ -99,6 +100,16 @@ const RecipeLineItemForFeed = (props) => {
       });
     }
 
+  const maybeRenderCameraIcon = () => {
+    if (recipe.photo_url) {
+      return (
+        <div>
+          <CameraIcon />
+        </div>
+      )
+    }
+  }
+
   return (
     <li className="flex flex-row py-2 content-between">
       <div className="flex flex-col w-2/12 items-center">
@@ -109,7 +120,10 @@ const RecipeLineItemForFeed = (props) => {
       <div className="flex flex-col w-full items-between space-x-3">
         <Link to={`/recipe/${recipe.id}`} state={{ recipe: recipe }}>
           <div className="flex flex-row justify-between mb-3">
-            <h3 className="text-xl font-medium">{recipe.name}</h3>
+            <div className="flex flex-row">
+              <h3 className="text-xl font-medium mr-3">{recipe.name}</h3>
+              {maybeRenderCameraIcon()}
+            </div>
             <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
           </div>
           <div className=" flex flex-row justify-between text-sm text-gray-500">
@@ -120,6 +134,7 @@ const RecipeLineItemForFeed = (props) => {
               Comments: {recipe.comments.length}
             </p>
           </div>
+          <span className="text-xs">{`u/${recipe.user.username}`}</span>
         </Link>
       </div>
     </li>

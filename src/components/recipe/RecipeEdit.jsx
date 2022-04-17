@@ -5,34 +5,34 @@ import InstructionsEditList from '../forms/InstructionsEditList';
 import IngredientsDetailsEditList from '../forms/IngredientsDetailsEditList';
 import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
+import DeleteIcon from '../icons/DeleteIcon';
 
 const RecipeEdit = (props) => {
   const { loggedIn } = props;
-  const navigate = useNavigate();
   const params = useParams();
-  const recipeId = params.id
+  const navigate = useNavigate();
+  const { id } = params;
   const [ recipe, setRecipe ] = useState({})
   const [ recipeName, setRecipeName ] = useState(undefined)
   const [ recipeGenre, setRecipeGenre ]= useState(undefined)
   const [ instructions, setInstructions ] = useState(undefined)
   const [ ingredients, setIngredients ] = useState(undefined)
+  const [ selectedImage, setSelectedImage ] = useState()
 
   useEffect(() => {
-    ensureLoggedInUser()
-    fetchRecipeData()
-  }, [])
-
-  const ensureLoggedInUser = () => {
-    if (loggedIn !== "LOGGED_IN") {
-      return navigate('/')
+    if (id) {
+      fetchRecipeData()
     }
-  }
+  },[])
 
   async function fetchRecipeData() {
-    fetch(`${API_ROOT}/api/recipes/${recipeId}`, {
+    const body = { recipe: { id: id } }
+    fetch(`${API_ROOT}/api/recipes/${id}`, {
       headers: {'Content-Type': 'application/json'},
+      method: 'post',
       credentials: 'include',
       withCredentials: true,
+      body: JSON.stringify(body)
     })
     .then(response => response.json())
     .then(data => {
@@ -53,17 +53,16 @@ const RecipeEdit = (props) => {
       alert("ingredients and instructions are required")
       return
     }
-
     const body = { 
       recipe: {
         id: recipe.id,
         name: recipeName,
         genre: recipeGenre,
         recipe_ingredients_attributes: ingredients,
-        instructions_attributes: instructions
+        instructions_attributes: instructions,
+        picture: selectedImage
       }
     }
-
     fetch(`${API_ROOT}/api/recipes/${recipe.id}`, {
       headers: {'Content-Type': 'application/json'},
       method: 'put',
@@ -74,18 +73,13 @@ const RecipeEdit = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200){
-        data = JSON.parse(data.recipe)
-        setIngredients(data.recipe_ingredients)
-        setInstructions(data.instructions)
-        alert('Recipe updated!')
+        fetchRecipeData();
       }
     });
   }
 
   async function handleRecipeDelete() {
-
     const body = { recipe: recipe }
-
     fetch(`${API_ROOT}/api/recipes/${recipe.id}`, {
       headers: {'Content-Type': 'application/json'},
       method: 'delete',
@@ -98,6 +92,24 @@ const RecipeEdit = (props) => {
       if (data.status === 200) {
         alert("Recipe Deleted!");
         navigate('/')
+      }
+    });
+  }
+
+  async function handleRecipePhotoDelete(e) {
+    e.preventDefault();
+    const body = { recipe: recipe }
+    fetch(`${API_ROOT}/api/recipes/photos/${recipe.id}`, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'delete',
+      credentials: 'include',
+      withCredentials: true,
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        fetchRecipeData();
       }
     });
   }
@@ -131,6 +143,65 @@ const RecipeEdit = (props) => {
   const removeInstructionFromInstructionsArray = () => {
     const tmp = instructions.slice(0, -1)
     setInstructions(tmp)
+  }
+
+  const removeOrUpdatePictutre = () => {
+    if (recipe.photo_url || selectedImage) {
+      return (
+        <div className="flex flex-row p-5 justify-center items-center">
+            <img className="h-30 w-96 rounded" src={`${recipe.photo_url ? recipe.photo_url : selectedImage}`}></img>
+            <span className="text-red-600" 
+              onClick={(e) => {
+                recipe.photo_url ? handleRecipePhotoDelete(e) :
+                setSelectedImage(undefined)    
+              }}>
+                <div className="ml-2">
+                  <DeleteIcon />
+                </div>
+            </span>
+        </div>
+      )
+    } else {
+      return (
+        <div className="flex items-center justify-center bg-grey-lighter mb-5">
+         <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-400 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+          <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+          </svg>
+          <span className="mt-2 text-base leading-normal">Select a Photo!</span>
+            <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                multiple={false}
+                name="picture"
+                onChange={(e) => {
+                  handleFileRead(e)
+                }}
+            />
+          </label>
+        </div>
+      )
+    }
+  }
+
+  const handleFileRead = async (e) => {
+    const file = e.target.files[0]
+    const base64 = await convertBase64(file)
+    setSelectedImage(base64)
+  }
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
   }
 
   return (
@@ -216,6 +287,9 @@ const RecipeEdit = (props) => {
               <div className="mt-3 mb-3">
                 <button className="text-blue-400" onClick={(e)=> addElementToRecipeIngredientsOrInstructionsArray(e, "ins")}><PlusIcon/></button>
               </div>
+            </div>
+            <div>
+              {removeOrUpdatePictutre()}
             </div>
           </div>
           <div className="mb-5 ml-3">

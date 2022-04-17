@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import { API_ROOT } from '../../apiRoot';
+import { timeSince } from '../../functions'
 import UpvoteIcon from '../icons/UpvoteIcon'
 import DownvoteIcon from '../icons/DownvoteIcon'
 
@@ -129,34 +131,6 @@ const Comment = (props) => {
       });
     }
 
-  function timeSince(date) {
-
-    var seconds = Math.floor((new Date() - new Date(date)) / 1000);
-  
-    var interval = seconds / 31536000;
-  
-    if (interval > 1) {
-      return Math.floor(interval) + " years";
-    }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-      return Math.floor(interval) + " months";
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-      return Math.floor(interval) + " days";
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-      return Math.floor(interval) + " hours";
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-      return Math.floor(interval) + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-  }
-
   const editButtonToggle = () => {
     if (!editContent) {
       setEditContent(true)
@@ -243,13 +217,15 @@ const Comment = (props) => {
           {maybeRenderEditAndDeleteButtons()}
         </div>
         <div className="text-l text-indigo-800">
-        {`u/${comment.user.username}`}
+        <Link to={`/user/${comment.user.id}/`}>
+          {`u/${comment.user.username}`}
+        </Link>
         </div>
         <div className="text-xs">
         {`${timeSince(comment.created_at)} ago`}
         </div>
       </div>
-      <div className="w-full h-full p-2 bg-indigo-100">
+      <div className="w-full h-full p-2 bg-gray-100">
         {renderContentOrEdit()}
       </div>
     </div>

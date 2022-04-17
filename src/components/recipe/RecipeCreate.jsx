@@ -4,6 +4,7 @@ import { API_ROOT } from '../../apiRoot';
 import InstructionsInputList from '../forms/InstructionsInputList';
 import IngredientsDetailsInputList from '../forms/IngredientsDetailsInputList';
 import PlusIcon from '../icons/plusIcon'
+import DeleteIcon from '../icons/DeleteIcon';
 
 
 const RecipeCreate = (props) => {
@@ -13,6 +14,7 @@ const RecipeCreate = (props) => {
   const [ recipeGenre, setRecipeGenre ]= useState('')
   const [ instructions, setInstructions ] = useState([])
   const [ ingredients, setIngredients ] = useState([])
+  const [ selectedImage, setSelectedImage ] = useState()
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -29,7 +31,8 @@ const RecipeCreate = (props) => {
         name: recipeName,
         genre: recipeGenre,
         recipe_ingredients_attributes: ingredients,
-        instructions_attributes: instructions
+        instructions_attributes: instructions,
+        picture: selectedImage
       }
     }
 
@@ -60,10 +63,6 @@ const RecipeCreate = (props) => {
     setIngredients(tmp);
   };
 
-  // const setPosition = () => {
-  //   instructions.length === 0 ? 
-  // }
-
   const addElementToRecipeIngredientsOrInstructionsArray = (e, typeOfAdd) => {
     e.preventDefault();
     if (typeOfAdd === "ing") {
@@ -82,6 +81,65 @@ const RecipeCreate = (props) => {
   const removeInstructionFromInstructionsArray = () => {
     const tmp = instructions.slice(0, -1)
     setInstructions(tmp)
+  }
+
+  const handleFileRead = async (e) => {
+    const file = e.target.files[0]
+    const base64 = await convertBase64(file)
+    setSelectedImage(base64)
+  }
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
+  
+  const selectedImageOrForm = () => {
+    if (!selectedImage) {
+      return (
+        <div className="flex items-center justify-center bg-grey-lighter mb-5">
+        <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-400 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+          <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+          </svg>
+          <span className="mt-2 text-base leading-normal">Select a Photo!</span>
+            <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                multiple={false}
+                name="picture"
+                onChange={(e) => {
+                  handleFileRead(e)
+                }}
+            />
+          </label>
+      </div>
+      )
+
+    } else {
+    return (
+      <div className="flex flex-row p-5 justify-center items-center">
+        <img className="h-30 w-96 rounded" src={`${selectedImage}`}></img>
+        <div
+          className="bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-2 ml-5 outline-none focus:outline-none"
+          onClick={() => setSelectedImage(undefined)}
+          >
+          <div className="text-red-600 ml-2">
+            <DeleteIcon />
+          </div>
+        </div>
+      </div>
+      )
+    }
   }
 
   return (
@@ -166,6 +224,7 @@ const RecipeCreate = (props) => {
               </div>
             </div>
           </div>
+          {selectedImageOrForm()}
           <div className="mb-5 ml-3">
             <button type="submit" className="
               mr-10
