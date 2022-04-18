@@ -11,11 +11,11 @@ const UserPanel = (props) => {
   const [ email, setEmail ] = useState("")
   const [ formErrorState, setFormErrorState ] = useState({ isError: false});
   const { currentUser, refreshUser } = props;
+  const params = useParams();
+
   useEffect(() => {
     fetchUser()
   }, [])
-
-  const params = useParams();
 
   async function fetchUser() {
     const body = { user: { user_id: params.id }}
@@ -320,20 +320,41 @@ const UserPanel = (props) => {
     }
   }
 
-  return (
-    <div className="flex flex-col w-full items-center">
+  if (currentUser.id) {
+    return (
+      <div className="flex flex-col w-full items-center">
+        <div className="mt-5 w-2/3">
+          <dl className="divide-y divide-gray-200">
+            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+              <dt className="text-sm font-medium text-gray-500">Username</dt>
+              <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <span className="flex-grow">{formOrDisplayUsername(user ? user.username : "")}</span>
+                <span className="ml-4 flex-shrink-0">
+                  { user ? maybeShowUpdateButton("username") : "loading.."}
+                </span>
+              </dd>
+            </div>
+            {maybeShowEmail()}
+          </dl>
+        </div>
+        <div>
+        </div>
+        <div className="flex flex-row w-2/3 mt-20 justify-start">
+          {renderRecipes()}
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <div className="flex flex-col w-full items-center">
       <div className="mt-5 w-2/3">
         <dl className="divide-y divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Username</dt>
             <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span className="flex-grow">{formOrDisplayUsername(user ? user.username : "")}</span>
-              <span className="ml-4 flex-shrink-0">
-                { user ? maybeShowUpdateButton("username") : "loading.."}
-              </span>
+              <span className="flex-grow">{user ? user.username : ""}</span>
             </dd>
           </div>
-          {maybeShowEmail()}
         </dl>
       </div>
       <div>
@@ -342,7 +363,8 @@ const UserPanel = (props) => {
         {renderRecipes()}
       </div>
     </div>
-  )
+    )
+  }
 }
 
 export default UserPanel;
