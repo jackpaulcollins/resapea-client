@@ -6,7 +6,6 @@ import IngredientsDetailsInputList from '../forms/IngredientsDetailsInputList';
 import PlusIcon from '../icons/plusIcon'
 import DeleteIcon from '../icons/DeleteIcon';
 
-
 const RecipeCreate = (props) => {
   const { currentUser } = props;
   const navigate = useNavigate();
@@ -142,6 +141,7 @@ const RecipeCreate = (props) => {
     }
   }
 
+
   return (
     <div className="flex w-screen justify-center mt-20">
       <div className="w-1/2 rounded-lg shadow-lg bg-white">
@@ -173,7 +173,7 @@ const RecipeCreate = (props) => {
                   aria-describedby="recipeTitle" placeholder="descriptive title.."/>
                 </div>
                 <div>
-                  <label className="mr-2 form-label inline-block mb-2 text-gray-700">Genre</label>
+                  <label className="mr-2 form-label inline-block mb-2 text-gray-700">Tags</label>
                   <input
                     type="text"
                     name="recipeTitle"
