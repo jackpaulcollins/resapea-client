@@ -6,15 +6,20 @@ import IngredientsDetailsEditList from '../forms/IngredientsDetailsEditList';
 import RecipeDelete from './RecipeDelete';
 import PlusIcon from '../icons/plusIcon'
 import DeleteIcon from '../icons/DeleteIcon';
+import DropDown from '../forms/DropDown'
+import { GenreOptions } from '../../GenreOptions'
+import { CuisineOptions } from '../../CuisineOptions'
+import { TagOptions } from '../../TagOptions'
 
-const RecipeEdit = (props) => {
-  const { loggedIn } = props;
+const RecipeEdit = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { id } = params;
   const [ recipe, setRecipe ] = useState({})
   const [ recipeName, setRecipeName ] = useState(undefined)
   const [ recipeGenre, setRecipeGenre ]= useState(undefined)
+  const [ recipeCuisine, setRecipeCuisine ] = useState(undefined)
+  const [ recipeCompatibilities, setRecipeCompatibilities ] = useState(undefined)
   const [ instructions, setInstructions ] = useState(undefined)
   const [ ingredients, setIngredients ] = useState(undefined)
   const [ selectedImage, setSelectedImage ] = useState()
@@ -58,6 +63,8 @@ const RecipeEdit = (props) => {
         id: recipe.id,
         name: recipeName,
         genre: recipeGenre,
+        cuisine: recipeCuisine,
+        compatibilities: recipeCompatibilities,
         recipe_ingredients_attributes: ingredients,
         instructions_attributes: instructions,
         picture: selectedImage
@@ -204,15 +211,27 @@ const RecipeEdit = (props) => {
     })
   }
 
+  const handleGenreChange = (e) => {
+    setRecipeGenre(e.label)
+  }
+
+  const handleCuisineChange = (e) => {
+    setRecipeCuisine(e.label)
+  }
+
+  const handleCompatibilitiesChange = (e) => {
+    setRecipeCompatibilities(e.map(e => e.label))
+  }
+
   return (
     <div className="flex w-screen justify-center mt-20">
-      <div className="w-1/2 rounded-lg shadow-lg bg-white">
+      <div className="w-1/2 rounded-lg shadow-lg bg-white p-5">
         <form onSubmit={e => handleSubmit(e)}>
           <div>
             <h5 className="text-center mt-2 text-xl">Change Your Recipe</h5>
-            <div className="form-group flex mt-3 mb-6 place-content-around items-baseline">
-              <div>
-                <label className="mr-2 form-label inline-block mb-2 text-gray-700">Recipe Title</label>
+            <div className="form-group flex mt-3 mb-6 justify-center">
+              <div className="mt-10 flex flex-row items-center w-5/6">
+                <label className="mr-2 form-label">Title:</label>
                 <input
                   type="text"
                   name="recipeTitle"
@@ -220,7 +239,7 @@ const RecipeEdit = (props) => {
                   onChange={(e) => setRecipeName(e.target.value)}
                   required
                   className="form-control
-                  w-max
+                  w-full
                   px-3
                   py-1.5
                   text-base
@@ -235,31 +254,30 @@ const RecipeEdit = (props) => {
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="title"
                   aria-describedby="recipeTitle" placeholder="descriptive title.."/>
                 </div>
-                <div>
-                  <label className="mr-2 form-label inline-block mb-2 text-gray-700">Genre</label>
-                  <input
-                    type="text"
-                    name="recipeTitle"
-                    defaultValue={recipe.genre}
-                    onChange={(e) => setRecipeGenre(e.target.value)}
-                    required
-                    className="form-control
-                    w-max
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    ml-2
-                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="genre"
-                    aria-describedby="recipeGenre" placeholder="Italian, vegan, etc.."/>
+              </div>
+              <div className="mt-12 flex flex-row justify-around ml-2">
+                <div className="flex flex-row w-1/2 items-center">
+                Genre:
+                <div className="w-2/3 ml-2">
+                <DropDown isMulti={false} options={GenreOptions} defaultValue={recipeGenre === undefined ? recipe.genre : recipeGenre } handleChange={handleGenreChange}/>
                 </div>
-            </div>
+                </div>
+                <div className="flex flex-row w-1/2 items-center">
+                Cuisine:
+                <div className="w-2/3 ml-2">
+                  <DropDown isMulti={false} options={CuisineOptions} required={true} defaultValue={recipeCuisine === undefined ? recipe.cuisine : recipeCuisine } handleChange={handleCuisineChange}/>
+                </div>
+                </div>
+              </div>
+              <div className="mt-10">
+                Tags (optional):
+                <DropDown     options={TagOptions} 
+                              isMulti={true}
+                              useProps={recipeCompatibilities === undefined ? true : false} 
+                              defaultValue={recipeCompatibilities === undefined ? recipe.compatibilities : recipeCompatibilities} 
+                              handleChange={handleCompatibilitiesChange}
+                />
+              </div>
           </div>
           <div>
             <div className="p-5">

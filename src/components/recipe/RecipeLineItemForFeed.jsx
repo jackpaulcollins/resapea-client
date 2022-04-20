@@ -110,6 +110,27 @@ const RecipeLineItemForFeed = (props) => {
     }
   }
 
+  const maybeRenderCompatibilities = () => {
+    if (recipe.compatibilities) {
+      return recipe.compatibilities.map ((c, i) => {
+        return (
+          <div key={i}>
+            <span className="
+                    text-xs 
+                    ml-1
+                    bg-gray-200
+                    rounded
+                    p-1
+                    "
+            >
+                {c}
+            </span>
+          </div>
+        )
+      })
+    }
+  }
+
   return (
     <li className="flex flex-row py-2 content-between">
       <div className="flex flex-col w-2/12 items-center">
@@ -124,7 +145,12 @@ const RecipeLineItemForFeed = (props) => {
               <h3 className="text-xl font-medium mr-3">{recipe.name}</h3>
               {maybeRenderCameraIcon()}
             </div>
-            <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
+            <div className="flex flex-row">
+              {maybeRenderCompatibilities()}
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Ingredients: {recipe.recipe_ingredients.length}</p>
+            </div>
           </div>
           <div className=" flex flex-row justify-between text-sm text-gray-500">
             <p>
