@@ -13,7 +13,6 @@ import { API_ROOT } from '../apiRoot';
 import Dashboard from './Dashboard';
 import SearchResults from './SearchResults'
 
-
 const App = () => {
 
   useEffect(() => {

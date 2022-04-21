@@ -81,6 +81,7 @@ const RecipeEdit = () => {
     .then(data => {
       if (data.status === 200){
         fetchRecipeData();
+        alert("Recipe Updated!")
       }
     });
   }

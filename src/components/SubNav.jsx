@@ -16,7 +16,9 @@ const SubNav = (props) => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      if (data.status === 200) {
+          alert("Your recipe arive to your email shortly!")
+        }
       });
   }
 
@@ -25,7 +27,7 @@ const SubNav = (props) => {
       return (
         <div>
           <Link to={`/recipe/${recipe.id}/edit`}>
-            <span>
+            <span className="rounded hover:bg-blue-200">
               edit
             </span>
           </Link>
@@ -46,7 +48,7 @@ const SubNav = (props) => {
           justify-around"
     >
       {maybeRenderEditLink()}
-      <span onClick={emailRecipeToUser}>email yourself</span>
+      <span className="rounded hover:bg-blue-200 cursor-pointer" onClick={emailRecipeToUser}>email yourself</span>
     </div>
   )
 }

@@ -1,23 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { API_ROOT } from '../../apiRoot';
 import RecipeLineItemForFeed from './RecipeLineItemForFeed';
+import ReactPaginate from 'react-paginate';
 
 
 const RecipeFeed = (props) => {
   const { currentUserId } = props;
   const [recipes, setRecipes] = useState();
+  const [ pageCount, setPageCount ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(1)
 
   useEffect(() => {
-    fetchRecipes();
-  }, []);
+    async function fetchRecipes() {
+      const body = { recipe: { page: currentPage }}
+      fetch(`${API_ROOT}/api/recipe_feed`, {
+        headers: {'Content-Type': 'application/json'},
+        method: 'post',
+        credentials: 'include',
+        withCredentials: true,
+        body: JSON.stringify(body)  
+      })
+      .then(response => response.json())
+      .then(data => {
+        setRecipes(JSON.parse(data.data))
+        setPageCount(data.pages)
+        });
+    }
+    fetchRecipes()
+  }, [currentPage]);
 
-  async function fetchRecipes() {
-    fetch(`${API_ROOT}/api/recipes`)
-    .then(response => response.json())
-    .then(data => {
-      setRecipes(JSON.parse(data.data))
-      });
-  }
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1)
+  };
 
   const renderRecipes = () => {
     if (recipes) {
@@ -28,6 +43,29 @@ const RecipeFeed = (props) => {
               <RecipeLineItemForFeed key={recipe.id} recipe={recipe} currentUserId={currentUserId} votes={recipe.votes} />
             ))}
           </ul>
+          <div className="flex flex-col mt-5">
+              <div className="flex flex-row justify-center"id="container">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageCount={pageCount}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+              />
+              </div>
+            </div>
         </div>
       )
     } else {

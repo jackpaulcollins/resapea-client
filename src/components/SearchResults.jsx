@@ -1,11 +1,44 @@
-import React from 'react'
-import { useLocation } from 'react-router-dom'
-import RecipeLineItemForFeed from '../components/recipe/RecipeLineItemForFeed'
+import { React, useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import RecipeLineItemForFeed from '../components/recipe/RecipeLineItemForFeed';
+import DropDown from '../components/forms/DropDown';
+import { TagOptions } from '../TagOptions';
+import { API_ROOT } from '../apiRoot';
 
-const SearchResults = (props) => {
+const SearchResults = () => {
   const location = useLocation();
-  const recipes  = location.state.recipes
-  const currentUserId = location.state.currentUserId
+  const [recipes, setRecipes ]  = useState(location.state.recipes);
+  const queryString = location.state.queryString;
+  const currentUserId = location.state.currentUserId;
+  const [ recipeCompatibilities, setRecipeCompatibilities ] = useState(undefined)
+
+  const handleCompatibilitiesChange = (e) => {
+    setRecipeCompatibilities(e.map(e => e.label.toLowerCase()))
+  }
+
+  useEffect(() => {
+    if (recipeCompatibilities) {
+      fetchFilteredRecipes();
+    }
+  }, [recipeCompatibilities, queryString])
+
+  async function fetchFilteredRecipes() {
+    const body = { recipe: { query_string: queryString, compatibilities: recipeCompatibilities, filter: true } }
+    fetch(`${API_ROOT}/api/recipes_query`, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'post',
+      credentials: 'include',
+      withCredentials: true,
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 200) {
+        data = JSON.parse(data.data)
+        setRecipes(data)
+      }
+    })
+  }
 
   const renderRecipes = () => {
     if (recipes) {
@@ -21,13 +54,22 @@ const SearchResults = (props) => {
     } else {
       return (
         <div>
-          ...loading
+          <p>...No <strong>{recipeCompatibilities} {queryString}</strong> Recipes found. You should <Link to={currentUserId ? '/create-recipe' : '/'} className=" hover:bg-green-200 text-green-700 rounded-md text-s font-medium">create one!</Link></p>
         </div>
       )
     }
   }
   return (
-    <div>
+    <div className="flex flex-col items-center">
+      <div className="mt-10 mb-10 w-5/6">
+        Filtering based on your dietary needs is easy! Just add some compatibilities:
+        <DropDown     options={TagOptions} 
+                      isMulti={true}
+                      useProps={false} 
+                      defaultValue={undefined} 
+                      handleChange={handleCompatibilitiesChange}
+        />
+      </div>
       {renderRecipes()}
     </div>
   )

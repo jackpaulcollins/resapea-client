@@ -71,6 +71,27 @@ const RecipeView = (props) => {
       )
     }
   }
+
+  const maybeRenderCompatibilities = () => {
+    if (recipe.compatibilities) {
+      return recipe.compatibilities.map ((c, i) => {
+        return (
+          <div key={i}>
+            <span className="
+                    text-xs 
+                    ml-1
+                    bg-gray-200
+                    rounded
+                    p-1
+                    "
+            >
+                {c}
+            </span>
+          </div>
+        )
+      })
+    }
+  }
   
   if (recipe) {
     return (
@@ -81,6 +102,9 @@ const RecipeView = (props) => {
             <div className="flex flex-col ml-2 mb-3">
               <h1 className="text-xl pt-2">{recipe ? recipe.name : '..loading'}</h1>
               <p className="text-xs ml-2 gray-200">{recipe ? recipe.genre : '..loading'}</p>
+            </div>
+            <div className="flex flex-row">
+              {maybeRenderCompatibilities()}
             </div>
             <div className="flex flex-col">
               <div className="justify-end text-xs">
