@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { API_ROOT } from '../../apiRoot';
+import ReactPaginate from 'react-paginate';
 import RecipeLineItemForFeed from '../../components/recipe/RecipeLineItemForFeed'
 
 const UserPanel = (props) => {
@@ -10,15 +11,17 @@ const UserPanel = (props) => {
   const [ username, setUsername ] = useState("")
   const [ email, setEmail ] = useState("")
   const [ formErrorState, setFormErrorState ] = useState({ isError: false});
+  const [ pageCount, setPageCount ] = useState(0);
+  const [ currentPage, setCurrentPage ] = useState(1)
   const { currentUser, refreshUser } = props;
   const params = useParams();
 
   useEffect(() => {
     fetchUser()
-  }, [])
+  }, [currentPage])
 
   async function fetchUser() {
-    const body = { user: { user_id: params.id }}
+    const body = { user: { user_id: params.id, page: currentPage }}
     fetch(`${API_ROOT}/api/users`, {
       headers: {'Content-Type': 'application/json'},
       method: 'post',
@@ -33,6 +36,7 @@ const UserPanel = (props) => {
         const userRecipes = JSON.parse(data.data.recipes)
         setUser({ id: user.id, username: user.username, email: user.email })
         setUserRecipes(userRecipes)
+        setPageCount(data.data.pages)
       }
     });
   }
@@ -60,7 +64,11 @@ const UserPanel = (props) => {
         });
       }
     });
-  }
+  }  
+  
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1)
+  };
 
 
   const renderRecipes = () => {
@@ -342,6 +350,29 @@ const UserPanel = (props) => {
         <div className="flex flex-row w-2/3 mt-20 justify-start">
           {renderRecipes()}
         </div>
+        <div className="flex flex-col mt-5 mb-5">
+            <div className="flex flex-row justify-center"id="container">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageCount={pageCount}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+              />
+            </div>
+          </div>
       </div>
     )
   } else {

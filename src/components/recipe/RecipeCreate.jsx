@@ -161,7 +161,6 @@ const RecipeCreate = (props) => {
   }
 
   const handleCompatibilitiesChange = (e) => {
-    console.log(e)
     setRecipeCompatibilities(e.map(e => e.label))
   }
 

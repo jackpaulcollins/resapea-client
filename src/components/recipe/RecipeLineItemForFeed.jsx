@@ -132,7 +132,7 @@ const RecipeLineItemForFeed = (props) => {
   }
 
   return (
-    <li className="flex flex-row py-2 content-between">
+    <li className="flex flex-row py-2 content-between w-full">
       <div className="flex flex-col w-2/12 items-center">
         <button  onClick={() => upVote(recipe.id)}><UpvoteIcon userVote={userVotedOnResource} /></button>
         <p>{newVoteCount !== undefined ? newVoteCount : initialVoteCount}</p>

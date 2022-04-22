@@ -19,7 +19,6 @@ const DropDown = (props) => {
 
   const renderTags = () => {
     if (defaultValue && isMulti) {
-      console.log(isMulti, defaultValue)
       return defaultValue.map((d) => {
         return { label: d, value: d }
       })
