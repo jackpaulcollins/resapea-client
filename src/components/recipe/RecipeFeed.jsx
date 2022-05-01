@@ -108,24 +108,72 @@ const RecipeFeed = (props) => {
           </ul>
           <div className="flex flex-col mt-5 mb-5">
             <div className="flex flex-row justify-center"id="container">
-              <ReactPaginate
+            <ReactPaginate
+                className="inline-flex items-center -space-x-px"
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={handlePageClick}
                 pageCount={pageCount}
                 previousLabel="<"
                 renderOnZeroPageCount={null}
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
+                pageLinkClassName="py-2 
+                                   px-3 
+                                   leading-tight 
+                                   text-gray-500 
+                                   bg-white border 
+                                   border-gray-300 
+                                   hover:bg-gray-100 
+                                   hover:text-gray-700 
+                                   dark:bg-gray-800 
+                                   dark:border-gray-700 
+                                   dark:text-gray-400 
+                                   dark:hover:bg-gray-700 
+                                   dark:hover:text-white
+                                  "
+                previousClassName="py-2 
+                                   px-3 
+                                   leading-tight 
+                                   text-gray-500 
+                                   bg-white 
+                                   rounded-l-lg border 
+                                   border-gray-300 
+                                   hover:bg-gray-100 
+                                   hover:text-gray-700 
+                                   dark:bg-gray-800 
+                                   dark:border-gray-700 
+                                   dark:text-gray-400 
+                                   dark:hover:bg-gray-700 
+                                   dark:hover:text-white"
+                nextLinkClassName="py-2 
+                                   px-3 
+                                   leading-tight 
+                                   text-gray-500 
+                                   bg-white 
+                                   rounded-r-lg border 
+                                   border-gray-300 
+                                   hover:bg-gray-100 
+                                   hover:text-gray-700 
+                                   dark:bg-gray-800 
+                                   dark:border-gray-700 
+                                   dark:text-gray-400 
+                                   dark:hover:bg-gray-700 
+                                   dark:hover:text-white"
+                nextClassName=""
+                breakLinkClassName="py-2 
+                                    px-3 
+                                    leading-tight 
+                                    text-gray-500 
+                                    bg-white border 
+                                    border-gray-300 
+                                    hover:bg-gray-100 
+                                    hover:text-gray-700 
+                                    dark:bg-gray-800 
+                                    dark:border-gray-700 
+                                    dark:text-gray-400 
+                                    dark:hover:bg-gray-700 
+                                    dark:hover:text-white"
+                containerClassName=""
+                activeClassName="text-xl"
               />
             </div>
           </div>

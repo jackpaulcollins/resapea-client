@@ -29,7 +29,6 @@ const DropDown = (props) => {
     <div>
       <Select 
         width='200px'
-        menuColor='red'
         isMulti={isMulti} 
         options={options} 
         value={isMulti ? renderTags() : maybeRenderDefaultValue()}

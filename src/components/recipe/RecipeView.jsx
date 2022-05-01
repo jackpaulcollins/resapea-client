@@ -138,7 +138,7 @@ const RecipeView = (props) => {
     )
   } else 
   return (
-    "..loading"
+    ""
   )
 }
 
