@@ -95,7 +95,7 @@ const RecipeView = (props) => {
   
   if (recipe) {
     return (
-      <div className="flex-col font-mono">
+      <div className="flex-col">
       <div className="flex w-screen justify-center mt-20 rounded">
         <div className="w-1/2 shadow-lg rounded shadow-lg">
           <div className="flex justify-between items-baseline rounded">
