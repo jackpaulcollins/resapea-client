@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { API_ROOT } from '../../apiRoot';
-import { timeSince } from '../../functions'
-import UpvoteIcon from '../icons/UpvoteIcon'
-import DownvoteIcon from '../icons/DownvoteIcon'
+import { timeSince } from '../../functions';
+import UpvoteIcon from '../icons/UpvoteIcon';
+import DownvoteIcon from '../icons/DownvoteIcon';
+import ReplyIcon from '../icons/ReplyIcon';
+import CommentReplyInput from '../comments/CommentReplyInput'
+import { colorPicker } from '../../functions'
 
 const Comment = (props) => {
-  const { comment, triggerCommentRefetch, currentUserId, votes } = props;
+  const { comment, fetchComments, currentUserId, votes, recipeId, replyDepth, color } = props;
   const [ editContent, setEditContent ] = useState(false)
   const [ commentContent, setCommentContent ] = useState(comment.content)
   const [ initialVoteCount ] = useState(comment.total_points)
   const [ newVoteCount, setNewVoteCount ] = useState(undefined)
   const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
+  const [ activeReply, setActiveReply ] = useState(false)
 
   useEffect(() => {
     const vote = votes.filter(vote => vote.user_id === currentUserId)
     if (vote.length === 1) {
       setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
     }
-   }, [props, currentUserId, votes])
+   }, [props, currentUserId, votes, comment])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -38,7 +42,7 @@ const Comment = (props) => {
     .then(data => {
       if (data.status === 200){
         setEditContent(false)
-        triggerCommentRefetch();
+        fetchComments();
       }
     });
   }
@@ -53,7 +57,7 @@ const Comment = (props) => {
     .then(response => response.json())
     .then(data => {
       if (data.status === 200){
-        triggerCommentRefetch();
+        fetchComments();
       }
     });
   }
@@ -210,25 +214,72 @@ const Comment = (props) => {
     }
   }
 
+  const maybeRenderReplies = () => {
+    if (comment.replies.length >= 1) {
+      return comment.replies.map((r, i) => {
+        return (
+          <div className="mt-1 ml-6 pl-2 border-dashed border-l-2">
+            <Comment key={r.id} 
+                     comment={r} 
+                     currentUserId={currentUserId} 
+                     recipeId={recipeId} 
+                     votes={r.votes}
+                     fetchComments={fetchComments}
+                     color={color}
+            />
+          </div>
+        )
+      })
+    }
+  }
+
+  const toggleActiveReply = () => {
+    setActiveReply(!activeReply)
+  }
+
   return (
-    <div className="w-1/3 flex flex-col items-center shadow-lg rounded border mb-3">
-      <div className="flex flex-row w-full justify-between pl-2 pr-3">
+    <div className="flex flex-col">
+      <div>
+        <div className={`shadow-lg rounded border bg-${color}-200`}>
+          <div className="flex flex-row w-full justify-between pl-2 pr-3">
+            <div>
+              {maybeRenderEditAndDeleteButtons()}
+            </div>
+            <div className="text-l text-indigo-800">
+            <Link to={`/user/${comment.user.id}/`}>
+              {`u/${comment.user.username}`}
+            </Link>
+            </div>
+            <div className="text-xs">
+            {`${timeSince(comment.created_at)} ago`}
+            </div>
+          </div>
+          <div className="w-full h-full p-2 bg-gray-100">
+            {renderContentOrEdit()}
+            <div className="flex flex-row justify-end">
+              <button onClick={() => toggleActiveReply()}><ReplyIcon /></button>
+            </div>
+          </div>
+          <div className="w-full">
+          { activeReply ? <CommentReplyInput 
+                            recipeId={recipeId} 
+                            parentCommentId={comment.id} 
+                            replyingTo={comment.user.username}
+                            toggleActiveReply={toggleActiveReply}
+                            fetchComments={fetchComments}
+                          /> 
+                        : 
+              ""
+          }
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex flex-col h-full justify-around">
         <div>
-          {maybeRenderEditAndDeleteButtons()}
-        </div>
-        <div className="text-l text-indigo-800">
-        <Link to={`/user/${comment.user.id}/`}>
-          {`u/${comment.user.username}`}
-        </Link>
-        </div>
-        <div className="text-xs">
-        {`${timeSince(comment.created_at)} ago`}
+          {maybeRenderReplies(props)}
         </div>
       </div>
-      <div className="w-full h-full p-2 bg-gray-100">
-        {renderContentOrEdit()}
-      </div>
-    </div>
+  </div>
   )
 }
 

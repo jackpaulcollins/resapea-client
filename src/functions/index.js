@@ -22,3 +22,23 @@ export function timeSince(date) {
   }
   return Math.floor(seconds) + " seconds";
 }
+
+export function colorPicker() {
+  const colors = [ "red", 
+                   "blue", 
+                   "purple", 
+                   "green", 
+                   "indigo",
+                   "yellow",
+                   "pink",
+                   "cream-orange",
+                   "cyan",
+                   "light-green",
+                   "deep-orange",
+                   "amber",
+                   "light-blue",
+                   "fuscia",
+                   
+                  ]
+  return colors[Math.floor(Math.random() * colors.length)]
+}
