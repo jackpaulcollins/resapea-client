@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Transition } from "@headlessui/react";
-import { API_ROOT } from '../apiRoot';
-import LogoIcon from '../components/icons/LogoIcon';
+import { API_ROOT } from "../apiRoot";
+import LogoIcon from "../components/icons/LogoIcon";
 
 export default function NavigationBar(props) {
   const { user, logout } = props;
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const isLoggedIn = user.id ? true : false;
 
   const handleLogoutClick = () => {
-    logout()
-    navigate("/")
-  }
+    logout();
+    navigate("/");
+  };
 
   const loggedInLinks = () => {
     if (isLoggedIn) {
@@ -22,38 +22,38 @@ export default function NavigationBar(props) {
           <Link
             to={`/user/${user.id}/`}
             className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
-            >
+          >
             {user.username}
           </Link>
 
-           <button
+          <button
             onClick={() => handleLogoutClick()}
             className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
           >
             Logout
-         </button>
-      </div>
-      )
+          </button>
+        </div>
+      );
     } else {
       return (
         <div>
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
             className=" hover:bg-green-200 text-green-700 px-3 py-2 rounded-md text-sm font-medium"
-            >
+          >
             Login
           </button>
 
-           <button
-            onClick={() => navigate('/register')}
+          <button
+            onClick={() => navigate("/register")}
             className="text-green-700 hover:bg-green-200 hover:text-green-700 px-3 py-2 rounded-md text-sm font-medium"
           >
             Sign up
-         </button>
-    </div>
-      )
+          </button>
+        </div>
+      );
     }
-  }
+  };
 
   return (
     <div>
@@ -62,7 +62,7 @@ export default function NavigationBar(props) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <button className="mt-1" onClick={() => navigate('/')}>
+                <button className="mt-1" onClick={() => navigate("/")}>
                   <LogoIcon />
                 </button>
               </div>

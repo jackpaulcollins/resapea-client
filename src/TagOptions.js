@@ -1,66 +1,66 @@
 export const TagOptions = [
   {
     value: 0,
-    label: "Vegan"
+    label: "Vegan",
   },
   {
     value: 1,
-    label: "Vegetarian"
+    label: "Vegetarian",
   },
   {
     value: 2,
-    label: "Gluten Free"
+    label: "Gluten Free",
   },
   {
     value: 3,
-    label: "Keto"
+    label: "Keto",
   },
   {
     value: 4,
-    label: "Whole30"
+    label: "Whole30",
   },
   {
     value: 5,
-    label: "Plant Based"
+    label: "Plant Based",
   },
   {
     value: 6,
-    label: "Carnivore"
+    label: "Carnivore",
   },
   {
     value: 7,
-    label: "Sugar Free"
+    label: "Sugar Free",
   },
   {
     value: 8,
-    label: "Low Cal"
+    label: "Low Cal",
   },
   {
     value: 9,
-    label: "Mediterranean"
+    label: "Mediterranean",
   },
   {
     value: 10,
-    label: "Protein Rich"
+    label: "Protein Rich",
   },
   {
     value: 11,
-    label: "Paleo"
+    label: "Paleo",
   },
   {
-     value: 12,
-     label: "Raw"
+    value: 12,
+    label: "Raw",
   },
   {
     value: 13,
-    label: "South Beach"
+    label: "South Beach",
   },
   {
     value: 14,
-    label: "Atkins"
+    label: "Atkins",
   },
   {
     value: 16,
-    label: "Zone Balanced"
+    label: "Zone Balanced",
   },
-]
+];

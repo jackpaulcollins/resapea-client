@@ -4,10 +4,12 @@ const RecipeDelete = (props) => {
   const { handleRecipeDelete } = props;
 
   const deleteRecipe = () => {
-    handleRecipeDelete()
-  }
-  return(
-    <button onClick={deleteRecipe}className="
+    handleRecipeDelete();
+  };
+  return (
+    <button
+      onClick={deleteRecipe}
+      className="
     mt-5
     px-6
     py-2.5
@@ -24,8 +26,11 @@ const RecipeDelete = (props) => {
     active:bg-blue-800 active:shadow-lg
     transition
     duration-150
-    ease-in-out">Delete</button>
-  )
-}
+    ease-in-out"
+    >
+      Delete
+    </button>
+  );
+};
 
 export default RecipeDelete;

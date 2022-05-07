@@ -1,19 +1,26 @@
-import React from 'react';
-import MinusIcon from '../icons/minusIcon'
+import React from "react";
+import MinusIcon from "../icons/minusIcon";
 
 const IngredientsInputItem = (props) => {
-  const { position, 
-          length, 
-          removeIngredientFromIngredientsArray, 
-          updateIngredientInIngredientsArray, 
-          ingredient } = props;
+  const {
+    position,
+    length,
+    removeIngredientFromIngredientsArray,
+    updateIngredientInIngredientsArray,
+    ingredient,
+  } = props;
   const maybeRenderDeleteIcon = () => {
-    if (position === (length -1)) {
+    if (position === length - 1) {
       return (
-        <button className="ml-2 text-red-400"  onClick={(e) => removeIngredientFromIngredientsArray()}><MinusIcon/></button>
-      )
+        <button
+          className="ml-2 text-red-400"
+          onClick={(e) => removeIngredientFromIngredientsArray()}
+        >
+          <MinusIcon />
+        </button>
+      );
     }
-  }
+  };
 
   return (
     <div className="mt-1 rounded-md flex-col w-full">
@@ -25,10 +32,19 @@ const IngredientsInputItem = (props) => {
           name="measurement_unit_quantity"
           className="focus:ring-indigo-500 focus:border-indigo-500 block w-20 mr-1 sm:text-sm border-gray-300 rounded-md"
           defaultValue={ingredient.measurement_unit_quantity}
-          onChange={(e) => updateIngredientInIngredientsArray("measurement_unit_quantity", position, e.target.value)}
+          onChange={(e) =>
+            updateIngredientInIngredientsArray(
+              "measurement_unit_quantity",
+              position,
+              e.target.value
+            )
+          }
         />
         <div className="block inset-y-0 right-0 flex items-center">
-          <label htmlFor="measurementUnitType" className="sr-only block inset-y-0 right-0 flex items-center">
+          <label
+            htmlFor="measurementUnitType"
+            className="sr-only block inset-y-0 right-0 flex items-center"
+          >
             type
           </label>
           <select
@@ -47,7 +63,13 @@ const IngredientsInputItem = (props) => {
                        mr-1
                        "
             value={ingredient.measurement_unit_type}
-            onChange={(e) => updateIngredientInIngredientsArray("measurement_unit_type", position, e.target.value)}
+            onChange={(e) =>
+              updateIngredientInIngredientsArray(
+                "measurement_unit_type",
+                position,
+                e.target.value
+              )
+            }
             required
           >
             <option value=""></option>
@@ -76,38 +98,50 @@ const IngredientsInputItem = (props) => {
                      ml-1
                      "
           defaultValue={ingredient.ingredient_name}
-          onChange={(e) => updateIngredientInIngredientsArray("ingredient_name", position, e.target.value)}
+          onChange={(e) =>
+            updateIngredientInIngredientsArray(
+              "ingredient_name",
+              position,
+              e.target.value
+            )
+          }
         />
         {maybeRenderDeleteIcon()}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const IngredientsDetailsInputList = (props) => {
-  const { ingredients, removeIngredientFromIngredientsArray,  updateIngredientInIngredientsArray } = props;
+  const {
+    ingredients,
+    removeIngredientFromIngredientsArray,
+    updateIngredientInIngredientsArray,
+  } = props;
   const renderInstructionsItems = () => {
     if (ingredients) {
       return ingredients.map((ingredient, index) => {
-        return <IngredientsInputItem
-                  key={index} 
-                  position={index}
-                  length={ingredients.length}
-                  ingredient={ingredient}
-                  removeIngredientFromIngredientsArray={removeIngredientFromIngredientsArray}
-                  updateIngredientInIngredientsArray={updateIngredientInIngredientsArray}
-                />;
+        return (
+          <IngredientsInputItem
+            key={index}
+            position={index}
+            length={ingredients.length}
+            ingredient={ingredient}
+            removeIngredientFromIngredientsArray={
+              removeIngredientFromIngredientsArray
+            }
+            updateIngredientInIngredientsArray={
+              updateIngredientInIngredientsArray
+            }
+          />
+        );
       });
     } else {
-      return ""
+      return "";
     }
   };
 
-  return (
-    <div>
-      {renderInstructionsItems()}
-    </div>
-  )
-}
+  return <div>{renderInstructionsItems()}</div>;
+};
 
 export default IngredientsDetailsInputList;

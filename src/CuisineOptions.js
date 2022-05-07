@@ -1,78 +1,78 @@
 export const CuisineOptions = [
   {
     value: 1,
-    label: "American"
+    label: "American",
   },
   {
     value: 2,
-    label: "Italian"
+    label: "Italian",
   },
   {
     value: 3,
-    label: "Chinese"
+    label: "Chinese",
   },
   {
     value: 4,
-    label: "Mediterranean"
+    label: "Mediterranean",
   },
   {
     value: 5,
-    label: "Caribbean"
+    label: "Caribbean",
   },
   {
     value: 6,
-    label: "German"
+    label: "German",
   },
   {
     value: 7,
-    label: "Indian"
+    label: "Indian",
   },
   {
     value: 8,
-    label: "French"
+    label: "French",
   },
   {
     value: 9,
-    label: "Mexican"
+    label: "Mexican",
   },
   {
     value: 10,
-    label: "Lebanese"
+    label: "Lebanese",
   },
   {
     value: 11,
-    label: "Moroccan"
+    label: "Moroccan",
   },
   {
     value: 12,
-    label: "Turkish"
+    label: "Turkish",
   },
   {
-     value: 13,
-     label: "Thai"
+    value: 13,
+    label: "Thai",
   },
   {
     value: 14,
-    label: "Japanese"
+    label: "Japanese",
   },
   {
     value: 15,
-    label: "Cajun"
+    label: "Cajun",
   },
   {
     value: 16,
-    label: "Russian"
+    label: "Russian",
   },
   {
     value: 17,
-    label: "Hungarian"
+    label: "Hungarian",
   },
   {
     value: 18,
-    label: "Korean"
+    label: "Korean",
   },
   {
     value: 19,
-    label: "Spanish"
-  }
-]
+    label: "Spanish",
+  },
+];

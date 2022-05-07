@@ -1,195 +1,223 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { API_ROOT } from '../../apiRoot';
-import { timeSince } from '../../functions';
-import UpvoteIcon from '../icons/UpvoteIcon';
-import DownvoteIcon from '../icons/DownvoteIcon';
-import ReplyIcon from '../icons/ReplyIcon';
-import CommentReplyInput from '../comments/CommentReplyInput'
-import { colorPicker } from '../../functions'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { API_ROOT } from "../../apiRoot";
+import { timeSince } from "../../functions";
+import UpvoteIcon from "../icons/UpvoteIcon";
+import DownvoteIcon from "../icons/DownvoteIcon";
+import ReplyIcon from "../icons/ReplyIcon";
+import CommentReplyInput from "../comments/CommentReplyInput";
+import { colorPicker } from "../../functions";
 
 const Comment = (props) => {
-  const { comment, fetchComments, currentUserId, votes, recipeId, replyDepth, color } = props;
-  const [ editContent, setEditContent ] = useState(false)
-  const [ commentContent, setCommentContent ] = useState(comment.content)
-  const [ initialVoteCount ] = useState(comment.total_points)
-  const [ newVoteCount, setNewVoteCount ] = useState(undefined)
-  const [ userVotedOnResource, setUserVotedOnResource ] = useState(undefined)
-  const [ activeReply, setActiveReply ] = useState(false)
+  const {
+    comment,
+    fetchComments,
+    currentUserId,
+    votes,
+    recipeId,
+    replyDepth,
+    color,
+  } = props;
+  const [editContent, setEditContent] = useState(false);
+  const [commentContent, setCommentContent] = useState(comment.content);
+  const [initialVoteCount] = useState(comment.total_points);
+  const [newVoteCount, setNewVoteCount] = useState(undefined);
+  const [userVotedOnResource, setUserVotedOnResource] = useState(undefined);
+  const [activeReply, setActiveReply] = useState(false);
 
   useEffect(() => {
-    const vote = votes.filter(vote => vote.user_id === currentUserId)
+    const vote = votes.filter((vote) => vote.user_id === currentUserId);
     if (vote.length === 1) {
-      setUserVotedOnResource({ user_voted_on_resource: true, user_vote_value: vote[0].vote_type })
+      setUserVotedOnResource({
+        user_voted_on_resource: true,
+        user_vote_value: vote[0].vote_type,
+      });
     }
-   }, [props, currentUserId, votes, comment])
+  }, [props, currentUserId, votes, comment]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const body = { 
+    const body = {
       comment: {
-        content: commentContent
-      }
-    }
+        content: commentContent,
+      },
+    };
     fetch(`${API_ROOT}/api/comments/${comment.id}`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'put',
-      credentials: 'include',
+      headers: { "Content-Type": "application/json" },
+      method: "put",
+      credentials: "include",
       withCredentials: true,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200){
-        setEditContent(false)
-        fetchComments();
-      }
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          setEditContent(false);
+          fetchComments();
+        }
+      });
   }
 
   async function deleteComment() {
     fetch(`${API_ROOT}/api/comments/${comment.id}`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'delete',
-      credentials: 'include',
+      headers: { "Content-Type": "application/json" },
+      method: "delete",
+      credentials: "include",
       withCredentials: true,
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200){
-        fetchComments();
-      }
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          fetchComments();
+        }
+      });
   }
 
   async function fetchVotes() {
-    const body = { resource: {voteable_type: "Comment" }}
+    const body = { resource: { voteable_type: "Comment" } };
     fetch(`${API_ROOT}/api/fetch_votes/${comment.id}`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'post',
-      credentials: 'include',
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      credentials: "include",
       withCredentials: true,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200) {
-        setNewVoteCount(data.vote_count)
-        setUserVotedOnResource({
-          user_voted_on_resource: data.user_voted_on_resource,
-          user_vote_value: data.user_vote_value
-        })
-      } else if (data.status === 500 ) {
-        alert("Please login or sign up to vote")
-      } 
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          setNewVoteCount(data.vote_count);
+          setUserVotedOnResource({
+            user_voted_on_resource: data.user_voted_on_resource,
+            user_vote_value: data.user_vote_value,
+          });
+        } else if (data.status === 500) {
+          alert("Please login or sign up to vote");
+        }
+      });
   }
 
   async function upVote(id) {
-    const body = { 
+    const body = {
       resource: {
         voteable_type: "Comment",
         voteable_id: id,
-        vote_type: 1
-      }
-    }
+        vote_type: 1,
+      },
+    };
     fetch(`${API_ROOT}/api/votes`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'post',
-      credentials: 'include',
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      credentials: "include",
       withCredentials: true,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200) {
-        fetchVotes()
-      } else if (data.status === 500 ) {
-        alert("Please login or sign up to vote")
-      } 
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          fetchVotes();
+        } else if (data.status === 500) {
+          alert("Please login or sign up to vote");
+        }
+      });
   }
 
   async function downVote(id) {
-    const body = { 
+    const body = {
       resource: {
         voteable_type: "Comment",
         voteable_id: id,
-        vote_type: -1
-      }
-    }
+        vote_type: -1,
+      },
+    };
     fetch(`${API_ROOT}/api/votes`, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'post',
-      credentials: 'include',
+      headers: { "Content-Type": "application/json" },
+      method: "post",
+      credentials: "include",
       withCredentials: true,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 200) {
-        fetchVotes()
-      } else if (data.status === 500 ) {
-        alert("Please login or sign up to vote")
-      } 
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 200) {
+          fetchVotes();
+        } else if (data.status === 500) {
+          alert("Please login or sign up to vote");
+        }
       });
-    }
+  }
 
   const editButtonToggle = () => {
     if (!editContent) {
-      setEditContent(true)
+      setEditContent(true);
     } else {
-      setEditContent(false)
+      setEditContent(false);
     }
-  }
+  };
 
   const renderEditButtonText = () => {
     if (!editContent) {
-      return <p>Edit</p>
+      return <p>Edit</p>;
     } else {
-      return <p>Cancel</p>
+      return <p>Cancel</p>;
     }
-  }
+  };
 
   const maybeRenderEditAndDeleteButtons = () => {
     if (comment.user.id === currentUserId) {
       return (
         <div>
-          <button onClick={editButtonToggle} className="text-xs mr-2">{renderEditButtonText()}</button>
-          <button onClick={deleteComment} className={`text-xs ${editContent ? "hidden" : ""}`}>Delete</button>
+          <button onClick={editButtonToggle} className="text-xs mr-2">
+            {renderEditButtonText()}
+          </button>
+          <button
+            onClick={deleteComment}
+            className={`text-xs ${editContent ? "hidden" : ""}`}
+          >
+            Delete
+          </button>
         </div>
-      )
+      );
     } else {
       return (
         <div className="flex flex-row">
           <button onClick={() => upVote(comment.id)}>
-            <UpvoteIcon userVote={userVotedOnResource}/>
+            <UpvoteIcon userVote={userVotedOnResource} />
           </button>
-           <span>{newVoteCount !== undefined ? newVoteCount : initialVoteCount}</span>
-           <button onClick={() => downVote(comment.id)}>
-            <DownvoteIcon userVote={userVotedOnResource}/>
+          <span>
+            {newVoteCount !== undefined ? newVoteCount : initialVoteCount}
+          </span>
+          <button onClick={() => downVote(comment.id)}>
+            <DownvoteIcon userVote={userVotedOnResource} />
           </button>
         </div>
-      )
+      );
     }
-  }
+  };
 
   const renderContentOrEdit = () => {
     if (!editContent) {
       return (
-        <div className="w-full h-full pl-2 pt-1 pb-2">
-          {comment.content}
-        </div>
-      )
+        <div className="w-full h-full pl-2 pt-1 pb-2">{comment.content}</div>
+      );
     } else {
       return (
-        <form onSubmit={e => handleSubmit(e)} className="flex flex-wrap">
+        <form onSubmit={(e) => handleSubmit(e)} className="flex flex-wrap">
           <div className="w-full">
-              <textarea onChange={(e) => setCommentContent(e.target.value)} defaultValue={commentContent} className="rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Type Your Comment' required></textarea>
+            <textarea
+              onChange={(e) => setCommentContent(e.target.value)}
+              defaultValue={commentContent}
+              className="rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+              name="body"
+              placeholder="Type Your Comment"
+              required
+            ></textarea>
           </div>
           <div className="w-full md:w-full flex items-start md:w-full">
             <div>
-              <input type='submit' value='Edit' className="
+              <input
+                type="submit"
+                value="Edit"
+                className="
               mr-10
               px-6
               py-2.5
@@ -206,81 +234,82 @@ const Comment = (props) => {
               active:bg-blue-800 active:shadow-lg
               transition
               duration-150
-              ease-in-out"/>
+              ease-in-out"
+              />
             </div>
           </div>
         </form>
-      )
+      );
     }
-  }
+  };
 
   const maybeRenderReplies = () => {
     if (comment.replies.length >= 1) {
       return comment.replies.map((r, i) => {
         return (
           <div className="mt-1 ml-6 pl-2 border-dashed border-l-2">
-            <Comment key={r.id} 
-                     comment={r} 
-                     currentUserId={currentUserId} 
-                     recipeId={recipeId} 
-                     votes={r.votes}
-                     fetchComments={fetchComments}
-                     color={color}
+            <Comment
+              key={r.id}
+              comment={r}
+              currentUserId={currentUserId}
+              recipeId={recipeId}
+              votes={r.votes}
+              fetchComments={fetchComments}
+              color={color}
             />
           </div>
-        )
-      })
+        );
+      });
     }
-  }
+  };
 
   const toggleActiveReply = () => {
-    setActiveReply(!activeReply)
-  }
+    setActiveReply(!activeReply);
+  };
 
   return (
     <div className="flex flex-col">
       <div>
         <div className={`shadow-lg rounded border bg-${color}-200`}>
           <div className="flex flex-row w-full justify-between pl-2 pr-3">
-            <div>
-              {maybeRenderEditAndDeleteButtons()}
-            </div>
+            <div>{maybeRenderEditAndDeleteButtons()}</div>
             <div className="text-l text-indigo-800">
-            <Link to={`/user/${comment.user.id}/`}>
-              {`u/${comment.user.username}`}
-            </Link>
+              <Link to={`/user/${comment.user.id}/`}>
+                {`u/${comment.user.username}`}
+              </Link>
             </div>
             <div className="text-xs">
-            {`${timeSince(comment.created_at)} ago`}
+              {`${timeSince(comment.created_at)} ago`}
             </div>
           </div>
           <div className="w-full h-full p-2 bg-gray-100">
             {renderContentOrEdit()}
             <div className="flex flex-row justify-end">
-              <button onClick={() => toggleActiveReply()}><ReplyIcon /></button>
+              <button onClick={() => toggleActiveReply()}>
+                <ReplyIcon />
+              </button>
             </div>
           </div>
           <div className="w-full">
-          { activeReply ? <CommentReplyInput 
-                            recipeId={recipeId} 
-                            parentCommentId={comment.id} 
-                            replyingTo={comment.user.username}
-                            toggleActiveReply={toggleActiveReply}
-                            fetchComments={fetchComments}
-                          /> 
-                        : 
+            {activeReply ? (
+              <CommentReplyInput
+                recipeId={recipeId}
+                parentCommentId={comment.id}
+                replyingTo={comment.user.username}
+                toggleActiveReply={toggleActiveReply}
+                fetchComments={fetchComments}
+              />
+            ) : (
               ""
-          }
+            )}
           </div>
         </div>
       </div>
       <div className="w-full flex flex-col h-full justify-around">
-        <div>
-          {maybeRenderReplies(props)}
-        </div>
+        <div>{maybeRenderReplies(props)}</div>
       </div>
-  </div>
-  )
-}
+    </div>
+  );
+};
 
 export default Comment;
