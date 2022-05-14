@@ -18,6 +18,8 @@ const SubNav = (props) => {
       .then((data) => {
         if (data.status === 200) {
           alert("Your recipe arive to your email shortly!");
+        } else if (data.status === 404 ) {
+          alert(data.message)
         }
       });
   }
