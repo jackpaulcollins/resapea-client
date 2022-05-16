@@ -6,7 +6,6 @@ import UpvoteIcon from "../icons/UpvoteIcon";
 import DownvoteIcon from "../icons/DownvoteIcon";
 import ReplyIcon from "../icons/ReplyIcon";
 import CommentReplyInput from "../comments/CommentReplyInput";
-import { colorPicker } from "../../functions";
 
 const Comment = (props) => {
   const {
@@ -15,7 +14,6 @@ const Comment = (props) => {
     currentUserId,
     votes,
     recipeId,
-    replyDepth,
     color,
   } = props;
   const [editContent, setEditContent] = useState(false);

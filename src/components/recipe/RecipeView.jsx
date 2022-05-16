@@ -15,29 +15,28 @@ const RecipeView = (props) => {
 
   useEffect(() => {
     if (id) {
+      async function fetchRecipe() {
+        const body = { recipe: { id: id } };
+        fetch(`${API_ROOT}/api/recipes/${id}`, {
+          headers: { "Content-Type": "application/json" },
+          method: "post",
+          credentials: "include",
+          withCredentials: true,
+          body: JSON.stringify(body),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === 200) {
+              data = JSON.parse(data.recipe);
+              setRecipe(data);
+            } else {
+              navigate("/");
+            }
+          });
+      }
       fetchRecipe();
     }
-  }, []);
-
-  async function fetchRecipe() {
-    const body = { recipe: { id: id } };
-    fetch(`${API_ROOT}/api/recipes/${id}`, {
-      headers: { "Content-Type": "application/json" },
-      method: "post",
-      credentials: "include",
-      withCredentials: true,
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 200) {
-          data = JSON.parse(data.recipe);
-          setRecipe(data);
-        } else {
-          navigate("/");
-        }
-      });
-  }
+  }, [id, navigate]);
 
   const renderIngredients = () => {
     if (recipe) {
@@ -73,6 +72,7 @@ const RecipeView = (props) => {
         <div className="flex flex-col w-1/3 m-auto">
           <img
             className="aspect-auto rounded"
+            alt="user provided"
             src={`${recipe.photo_url}`}
           ></img>
         </div>

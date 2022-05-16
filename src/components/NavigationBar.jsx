@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Transition } from "@headlessui/react";
-import { API_ROOT } from "../apiRoot";
 import LogoIcon from "../components/icons/LogoIcon";
 
 export default function NavigationBar(props) {
